@@ -227,6 +227,33 @@ class DataTransformation:
 
             # Concatenate them
             final_df = pd.concat([phase1, phase2, phase3], ignore_index=True)
+            language_map = {
+                        'Beginner': 0,
+                        'Letter': 1,
+                        'Word': 2,
+                        'Paragraph': 3,
+                        'Story': 4
+                    }
+
+            maths_map = {
+                        'Beginner': 0,
+                        '0-9': 1,
+                        '10-99': 2,
+                        'Subtraction': 3,
+                        'Division': 4
+                    }
+
+            # Apply mappings (map once, fill missing with -1)
+            final_df['bl_language'] = (
+                        final_df['bl_language'].map(language_map).fillna(-1).astype(int))
+            final_df['bl_mathematics'] = (
+                        final_df['bl_mathematics'].map(maths_map).fillna(-1).astype(int)
+                        )
+            
+            # Keep only rows where both mappings succeeded
+            final_df = final_df[(final_df['bl_language'] != -1) & (final_df['bl_mathematics'] != -1)].reset_index(drop=True)
+            
+            # (removed duplicate mapping that caused NaNs when mapping ints with string-key dicts)
             final_df.to_csv(self.transformation_config.test_data_path, index = False, header = True)
 
             logging.info('Transformation of the data is completed')
