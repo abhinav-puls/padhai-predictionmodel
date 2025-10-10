@@ -274,9 +274,3 @@ if __name__ == "__main__":
     obj = DataTransformation()
     student_df, community_summary, baseline_dataset, skills_dist, test_data = obj.initiate_data_transformation()
     print('code ran successfully!')
-    # data_transformation = DataTransformation()
-    # train_arr, test_arr, _ =data_transformation.initiate_data_transformation(train_data, test_data)
-    # print(train_arr[0])
-    
-    # model_trainer = ModelTrainer()
-    # print(model_trainer.initiate_model_trainer(train_arr, test_arr)) # gives the r2_score
