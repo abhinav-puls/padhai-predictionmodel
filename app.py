@@ -121,5 +121,4 @@ def predict():
         }), 500
 
 if __name__ == "__main__":
-    # run on mac - dev server
     app.run(host="127.0.0.1", port=5000, debug=True)
