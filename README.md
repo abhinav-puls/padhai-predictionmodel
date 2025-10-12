@@ -78,11 +78,3 @@ lsof -t -i :5000 | xargs -r kill
 - The API runs the transformation in-process for convenience; in production you may want to run transformation as a separate batch job and point the API directly to the resulting `artifact/test.csv`.
 - Editable install (`-e .`) allows immediate use of local changes without reinstalling.
 
-## Contributing
-- Fixes and improvements: fork → branch → PR.
-- Add unit tests in `tests/` and run them before submitting PRs.
-
-## License & contact
-- Add your preferred license file.
-- For questions about this repository, contact the author listed in `setup.py`.
-
