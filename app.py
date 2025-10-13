@@ -1,4 +1,7 @@
 from flask import Flask, jsonify
+
+from dotenv import load_dotenv
+
 import pandas as pd
 import traceback
 import subprocess
@@ -7,118 +10,112 @@ import os
 import datetime
 from src.components.data_prediction import PredictPipeline
 from src.components.data_transformation import DataTransformation
+from flask_cors import CORS
 
-app = Flask(__name__)
 
 # path to the test dataset produced by your data transformation step
-TEST_DATA_PATH = "artifact/test.csv"
+TEST_DATA_PATH = os.path.join("artifact", "test.csv")
+OUTPUT_DIR = os.path.join("artifact", "output")
 
-@app.route("/predict", methods=["GET"])
-def predict():
-    try:
-        # Run the data transformation step in-process (use the same interpreter)
-        dt = DataTransformation()
+
+def create_app():
+    parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+
+    app = Flask(__name__)
+
+    CORS(app)
+    load_dotenv()
+
+    # basic config (override with environment variables as needed)
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret")
+    app.config["WTF_CSRF_ENABLED"] = False
+
+    
+    # simple health checkup is the flask server running really?
+    @app.route("/health", methods=["GET"])
+    def health():
+        return jsonify({"status": "ok"})
+
+    @app.route("/predict", methods=["GET"])
+    def predict():
         try:
-            result = dt.initiate_data_transformation()
-            if isinstance(result, tuple) and len(result) >= 5:
-                # expected: student_df, community_summary, baseline_dataset, skills_dist, test_data
-                test_df = result[4]
-            elif isinstance(result, pd.DataFrame):
-                test_df = result
-            else:
-                # fallback to loading the artifact file written by the transformer
-                test_df = pd.read_csv(TEST_DATA_PATH)
-        except Exception:
-            # if transformation raised, try to load the artifact file (allows idempotent runs)
-            test_df = pd.read_csv(TEST_DATA_PATH)
-
-        # instantiate prediction pipeline and run predictions
-        # ensure test_df is a DataFrame (coerce if possible)
-        if test_df is None:
-            return jsonify({"status": "error", "message": "No test data available"}), 400
-
-        # robust coercion/selection logic for common return types from DataTransformation
-        if not isinstance(test_df, pd.DataFrame):
+            app.logger.info("Running data transformation (in-process)")
+            dt = DataTransformation()
+            test_df = None
             try:
-                # if tuple/list, prefer a contained DataFrame (commonly the test df is last)
-                if isinstance(test_df, (list, tuple)):
-                    dfs = [x for x in test_df if isinstance(x, pd.DataFrame)]
-                    if dfs:
-                        test_df = dfs[-1]
-                    else:
-                        last = test_df[-1]
-                        if isinstance(last, str):
-                            test_df = pd.read_csv(last)
-                        else:
-                            test_df = pd.DataFrame(last)
-
-                # if dict, look for common keys or a DataFrame value
-                elif isinstance(test_df, dict):
-                    for key in ("test", "test_df", "test_data", "df"):
-                        if key in test_df and isinstance(test_df[key], pd.DataFrame):
-                            test_df = test_df[key]
-                            break
-                    else:
-                        # take first value and try to coerce
-                        val = next(iter(test_df.values()))
-                        if isinstance(val, pd.DataFrame):
-                            test_df = val
-                        elif isinstance(val, str):
-                            test_df = pd.read_csv(val)
-                        else:
-                            test_df = pd.DataFrame(val)
-
-                # if it's a path string, load CSV
-                elif isinstance(test_df, str):
-                    test_df = pd.read_csv(test_df)
-
-                # if Series, convert to single-row DataFrame
-                elif isinstance(test_df, pd.Series):
-                    test_df = test_df.to_frame().T
-
+                result = dt.initiate_data_transformation()
+                # common return shapes: tuple with test df at index 4, direct DataFrame, path, or None
+                if isinstance(result, tuple) and len(result) >= 5 and isinstance(result[4], pd.DataFrame):
+                    test_df = result[4]
+                elif isinstance(result, pd.DataFrame):
+                    test_df = result
+                elif isinstance(result, str) and os.path.exists(result):
+                    test_df = pd.read_csv(result)
                 else:
-                    # final attempt
+                    # fallback: try to read artifact/test.csv
+                    app.logger.info("Falling back to reading %s", TEST_DATA_PATH)
+                    if os.path.exists(TEST_DATA_PATH):
+                        test_df = pd.read_csv(TEST_DATA_PATH)
+            except Exception:
+                app.logger.exception("DataTransformation failed; attempting to load artifact/test.csv")
+                if os.path.exists(TEST_DATA_PATH):
+                    test_df = pd.read_csv(TEST_DATA_PATH)
+
+            if test_df is None:
+                msg = "No test data available after transformation"
+                app.logger.error(msg)
+                return jsonify({"status": "error", "message": msg}), 400
+
+            # ensure DataFrame
+            if not isinstance(test_df, pd.DataFrame):
+                try:
                     test_df = pd.DataFrame(test_df)
+                except Exception as e:
+                    app.logger.exception("Failed to coerce test data to DataFrame")
+                    return jsonify({
+                        "status": "error",
+                        "message": "Failed to coerce test data to DataFrame",
+                        "detail": str(e),
+                        "type": str(type(test_df))
+                    }), 400
 
-            except Exception as e:
-                return jsonify({
-                    "status": "error",
-                    "message": "Failed to coerce test data to DataFrame",
-                    "detail": str(e),
-                    "type": str(type(test_df))
-                }), 400
+            app.logger.info("Calling PredictPipeline.predict on %d rows", len(test_df))
+            pipeline = PredictPipeline()
+            pred_df = pipeline.predict(test_df)
 
-        pipeline = PredictPipeline()
-        pred_df = pipeline.predict(test_df)
+            if not isinstance(pred_df, pd.DataFrame):
+                msg = "Prediction pipeline did not return a DataFrame"
+                app.logger.error(msg)
+                return jsonify({"status": "error", "message": msg}), 500
 
-        # ensure we have a dataframe result
-        if not isinstance(pred_df, pd.DataFrame):
-            raise RuntimeError("Prediction pipeline did not return a DataFrame")
 
-        # extract prediction columns and convert to plain lists for JSON
-        lang_list = pred_df['el_prediction_lang'].astype(int).tolist()
-        maths_list = pred_df['el_prediction_maths'].astype(int).tolist()
+            # save output CSV
+            os.makedirs(OUTPUT_DIR, exist_ok=True)
+            filename = f"predictions_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+            output_path = os.path.join(OUTPUT_DIR, filename)
+            pred_df.to_csv(output_path, index=False)
+            app.logger.info("Saved predictions to %s", output_path)
 
-        # save preds to artifact/output with timestamped filename
-        output_dir = os.path.join("artifact", "output")
-        os.makedirs(output_dir, exist_ok=True)
-        filename = f"predictions_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-        output_path = os.path.join(output_dir, filename)
-        pred_df.to_csv(output_path, index=False)
+            return jsonify({
+                "status": "success",
+                "rows": len(pred_df),
+                "output_path": output_path
+            })
+        except Exception as e:
+            app.logger.exception("Unhandled error in /predict")
+            return jsonify({
+                "status": "error",
+                "message": str(e),
+                "trace": traceback.format_exc().splitlines()[-1]
+            }), 500
 
-        return jsonify({
-            "status": "success",
-            "rows": len(pred_df),
-            "lang_predictions": lang_list,
-            "maths_predictions": maths_list,
-            "output_path": output_path
-        })
-    except Exception as e:
-        return jsonify({
-            "status": "error",
-            "message": str(e),
-            "trace": traceback.format_exc().splitlines()[-1]
-        }), 500
+    return app
+
+
+app = create_app()
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5001)
+
+
+

@@ -6,6 +6,7 @@ import sys
 from src.exception import CustomException
 from src.logger import logging
 import pandas as pd
+from src.components.database import engine
 
 
 # from sklearn.model_selection import train_test_split
@@ -36,11 +37,31 @@ class DataTransformation:
     def initiate_data_transformation(self):
         logging.info('Entered the Data Transformation component.')
         try:
-            parakh_v1_student = pd.read_csv('assets/parakh_v1_student.csv')
-            logging.info('Read the Dataset as parakh_v1_student')
-
-            test = pd.read_csv('assets/parakh_v1_test.csv')
-            logging.info('Read the Dataset as parakh_v1_test')
+            
+            # read using SQLAlchemy engine when available, else use raw psycopg2 connection
+            try:
+                if engine is not None:
+                    parakh_v1_student = pd.read_sql('SELECT * FROM parakh_v1_student', con=engine)
+                    test = pd.read_sql('SELECT * FROM parakh_v1_test', con=engine)
+                else:
+                    # fallback to psycopg2 connection helper
+                    from src.components.database import get_connection
+                    conn = get_connection()
+                    try:
+                        parakh_v1_student = pd.read_sql('SELECT * FROM parakh_v1_student', con=conn)
+                        test = pd.read_sql('SELECT * FROM parakh_v1_test', con=conn)
+                    finally:
+                        try:
+                            conn.close()
+                        except Exception:
+                            pass
+                logging.info(
+                    "Read datasets from DB: parakh_v1_student rows=%s, parakh_v1_test rows=%s",
+                    len(parakh_v1_student), len(test)
+                )
+            except Exception as e:
+                logging.exception("Failed to read tables from DB")
+                raise CustomException(e, sys)
 
             # os.makedirs(os.path.dirname(self.transformation_config.train_data_path), exist_ok = True)
             print(parakh_v1_student.head(3))
@@ -190,16 +211,16 @@ class DataTransformation:
 
             # Convert to ratios
             maths_dist = maths_dist.div(maths_dist.sum(axis=1), axis=0).reset_index()
-
+            print(maths_dist.head(2))
             maths_dist = maths_dist.rename(columns={
                 'Beginner': 'Maths_Beginner',
-                '0-9': 'Maths_NR1',
+                '1-9': 'Maths_NR1',
                 '10-99': 'Maths_NR2',
                 'Subtraction': 'Maths_Sub',
                 'Division': 'Maths_Div'
             })[['community_id','Maths_Beginner', 'Maths_NR1', 'Maths_NR2', 'Maths_Sub', 'Maths_Div']]
             
-            
+        
             skills_dist_df = pd.merge(lang_dist, maths_dist, on='community_id')
             skills_dist_df.to_csv(self.transformation_config.skills_dist_path, index = False, header = True)
 

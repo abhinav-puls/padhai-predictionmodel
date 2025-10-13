@@ -37,8 +37,8 @@ class PredictPipeline:
                 logging.error("Unsupported input type for prediction: %s", type(data_transformed))
                 raise CustomException(f"Unsupported input type for prediction: {type(data_transformed)}", sys)
 
-            lang_model_path = 'artifact/xgb_lang.pkl'
-            maths_model_path = 'artifact/xgb_math.pkl'
+            lang_model_path = 'artifact/models/xgb_lang.pkl'
+            maths_model_path = 'artifact/models/xgb_math.pkl'
             logging.info("Using model paths lang=%s maths=%s", lang_model_path, maths_model_path)
 
             # load models
@@ -79,14 +79,45 @@ class PredictPipeline:
             logging.debug("Prepared X_input_lang shape=%s X_input_maths shape=%s", X_input_lang.shape, X_input_maths.shape)
 
             lang_pred = lang_model.predict(X_input_lang)
-            maths_pred = maths_model.predict(X_input_maths)
-            logging.info("Models predicted: lang count=%d, maths count=%d", len(np.asarray(lang_pred).ravel()), len(np.asarray(maths_pred).ravel()))
+            lang_pred_confidence = lang_model.predict_proba(X_input_lang).max(axis=1)
 
+            maths_pred = maths_model.predict(X_input_maths)
+            maths_pred_confidence = maths_model.predict_proba(X_input_maths).max(axis=1)
+
+            logging.info("Models predicted: lang count=%d, maths count=%d", len(np.asarray(lang_pred).ravel()), len(np.asarray(maths_pred).ravel()))
+            print(maths_pred_confidence)
             X['el_prediction_lang'] = np.array(lang_pred).ravel()
             X['el_prediction_maths'] = np.array(maths_pred).ravel()
 
-            logging.info("Attached prediction columns to DataFrame; returning DataFrame with shape %s", X.shape)
-            return X
+            X['el_lang_confidence'] = np.array(lang_pred_confidence).ravel()
+            X['el_maths_confidence'] = np.array(maths_pred_confidence).ravel()
+            print(f"the shape of X dataframe is shape:{X.shape} and {X['Phase'].unique()}")
+            Phase1_df = X[X['Phase']==1][['student_id','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
+            Phase2_df = X[X['Phase']==2][['student_id','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
+            Phase3_df = X[X['Phase']==3][['student_id','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
+
+            Ph1_df = Phase1_df.rename(columns={'el_prediction_lang':'el1_prediction_lang',
+                                        'el_prediction_maths':'el1_prediction_maths',
+                                        'el_lang_confidence':'el1_lang_confidence',
+                                        'el_maths_confidence':'el1_maths_confidence'})
+            
+            Ph2_df = Phase2_df.rename(columns={'el_prediction_lang':'el2_prediction_lang',
+                                        'el_prediction_maths':'el2_prediction_maths',
+                                        'el_lang_confidence':'el2_lang_confidence',
+                                        'el_maths_confidence':'el2_maths_confidence'})
+            
+            Ph3_df = Phase3_df.rename(columns={'el_prediction_lang':'el3_prediction_lang',
+                                        'el_prediction_maths':'el3_prediction_maths',
+                                        'el_lang_confidence':'el3_lang_confidence',
+                                        'el_maths_confidence':'el3_maths_confidence'})
+            
+            print(Ph1_df.student_id.nunique(),Ph2_df.student_id.nunique(),Ph3_df.student_id.nunique())
+            mrg1 = pd.merge(Ph1_df,Ph2_df,on='student_id',how='left')
+            final_merged = pd.merge(mrg1, Ph3_df, on='student_id', how='left')
+            final_merged = final_merged.drop_duplicates(subset=['student_id'])
+            print(X.head())
+            logging.info("Attached prediction columns to DataFrame; returning DataFrame with shape %s", final_merged.shape)
+            return final_merged
         except Exception as e:
             logging.exception("Error in PredictPipeline.predict")
             raise CustomException(e, sys)
