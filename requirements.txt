@@ -3,6 +3,7 @@ click==8.3.0
 contourpy==1.3.2
 cycler==0.12.1
 dill==0.4.0
+dotenv==0.9.9
 flask==3.1.2
 flask-cors==6.0.1
 flask-sqlalchemy==3.1.1
@@ -15,10 +16,12 @@ markupsafe==3.0.3
 matplotlib==3.10.7
 numpy==2.2.6
 packaging==25.0
+-e file:///Users/abhinavsonone/Desktop/project-padhai/padhai-predictionmodel
 pandas==2.3.3
 pillow==11.3.0
 pyparsing==3.2.5
 python-dateutil==2.9.0.post0
+python-dotenv==1.1.1
 pytz==2025.2
 scikit-learn==1.7.2
 scipy==1.15.3
@@ -30,4 +33,3 @@ typing-extensions==4.15.0
 tzdata==2025.2
 werkzeug==3.1.3
 xgboost==3.0.5
--e .
