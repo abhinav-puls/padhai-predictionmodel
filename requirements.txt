@@ -16,7 +16,6 @@ markupsafe==3.0.3
 matplotlib==3.10.7
 numpy==2.2.6
 packaging==25.0
--e file:///Users/abhinavsonone/Desktop/project-padhai/padhai-predictionmodel
 pandas==2.3.3
 pillow==11.3.0
 pyparsing==3.2.5
