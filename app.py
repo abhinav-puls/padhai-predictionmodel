@@ -10,7 +10,9 @@ import os
 import datetime
 from src.components.data_prediction import PredictPipeline
 from src.components.data_transformation import DataTransformation
+from src.components.data_tagging import DataTagging
 from flask_cors import CORS
+
 
 
 # path to the test dataset produced by your data transformation step
@@ -35,6 +37,21 @@ def create_app():
     @app.route("/health", methods=["GET"])
     def health():
         return jsonify({"status": "ok"})
+
+
+    @app.route("/tagging", methods=["GET"])
+    def tagging():
+        try:
+            app.logger.info("Running the Tagging of the mistakes (In Progress ..)")
+            dataTaggingVar = DataTagging()
+            dataTaggingVar.initiate_data_tagging()
+            
+
+            return jsonify({
+                "status": "success"})
+        except:
+            pass
+
 
     @app.route("/predict", methods=["GET"])
     def predict():
