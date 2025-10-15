@@ -11,6 +11,8 @@ from dataclasses import dataclass
 from src.exception import CustomException
 from src.logger import logging
 from src.components.database import engine
+from fuzzywuzzy import fuzz
+
 
 
 @dataclass
@@ -170,8 +172,74 @@ class DataTagging:
 
         logging.info("Letter-level tagging completed.")
         return letters_df
+    
 
-    ################# Main Entry Point ####################################
+    ################## WORD LEVEL TAGGING ##########################################
+
+    @staticmethod
+    def _strip_matras(word: str) -> str:
+        """Remove Devanagari matras and vowel signs."""
+        if not isinstance(word, str):
+            return ""
+        return re.sub(r'[\u093E-\u094C\u0900-\u0903\u094D]', '', word)
+
+    def _generate_word_tag(self, q: str, a: str) -> str:
+        """Generate tag for a word-level response."""
+        q, a = str(q).strip(), str(a).strip()
+
+        if not q or not a:
+            return "Omission"
+
+        # Missing matras — consonants same after removing vowel signs
+        if self._strip_matras(q) == self._strip_matras(a) and q != a:
+            return "Phonetic issue - Missing matras"
+
+        # Decoding issue — missing or deleted letters
+        if len(a) < len(q) and (a in q or q.startswith(a) or q.endswith(a)):
+            return "Decoding issue - Not able to identify all letters"
+
+        # Decoding issue — partial reading
+        if len(a) != len(q) and (a[:1] == q[:1] or a[-1:] == q[-1:]):
+            return "Decoding issue - Partial reading"
+
+        # Substitution issue — completely different
+        ratio = fuzz.ratio(q, a)
+        if ratio < 40:
+            return "Substitution issue - Unrelated word"
+
+        # Phonetic issue — similar sounding or looking
+        if 40 <= ratio < 85:
+            return "Phonetic issue - Similar looking/sounding"
+
+        # Correct
+        if q == a:
+            return "Correct"
+
+        return "Uncategorized"
+
+    def _tag_word_level(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Applies tagging logic for word-level responses."""
+        logging.info("Applying word-level tagging...")
+
+        words_df = df[df.get('level') == 'Word'].copy()
+        if words_df.empty:
+            logging.info("No 'Word' level records found.")
+            return words_df
+
+        words_df['question'] = words_df.get('question', '').astype(str).str.strip()
+        words_df['answer'] = words_df.get('answer', '').astype(str).str.strip()
+
+        words_df['tags'] = words_df.apply(
+            lambda row: self._generate_word_tag(row['question'], row['answer']),
+            axis=1
+        )
+
+        logging.info("Word-level tagging completed.")
+        return words_df
+
+
+
+    ################# Main Entry Point #############################################
     
     def initiate_data_tagging(self):
         """Main function to orchestrate the tagging process."""
@@ -182,12 +250,21 @@ class DataTagging:
             logging.debug(df.head(3))
 
             letter_tagged = self._tag_letter_level(df)
+            word_tagged = self._tag_word_level(df)
+
 
             # Save output
             if not letter_tagged.empty:
                 os.makedirs(os.path.dirname(self.config.letterPath), exist_ok=True)
                 letter_tagged.to_csv(self.config.letterPath, index=False)
                 logging.info(f"Letter-level tagged data saved to {self.config.letterPath}")
+
+
+            if not word_tagged.empty:
+                os.makedirs(os.path.dirname(self.config.wordPath), exist_ok=True)
+                word_tagged.to_csv(self.config.wordPath, index=False)
+                logging.info(f"Word-level data saved to {self.config.wordPath}")
+
 
             logging.info("Data tagging pipeline completed successfully.")
 
