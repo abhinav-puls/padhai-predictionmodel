@@ -8,6 +8,7 @@ flask==3.1.2
 flask-cors==6.0.1
 flask-sqlalchemy==3.1.1
 fonttools==4.60.1
+fuzzywuzzy==0.18.0
 itsdangerous==2.2.0
 jinja2==3.1.6
 joblib==1.5.2
@@ -16,8 +17,10 @@ markupsafe==3.0.3
 matplotlib==3.10.7
 numpy==2.2.6
 packaging==25.0
+-e file:///Users/abhinavsonone/Desktop/project-padhai/padhai-predictionmodel
 pandas==2.3.3
 pillow==11.3.0
+psycopg2-binary==2.9.11
 pyparsing==3.2.5
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
