@@ -45,7 +45,6 @@ def create_app():
             app.logger.info("Running the Tagging of the mistakes (In Progress ..)")
             dataTaggingVar = DataTagging()
             dataTaggingVar.initiate_data_tagging()
-            
 
             return jsonify({
                 "status": "success"})
