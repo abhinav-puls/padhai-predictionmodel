@@ -69,7 +69,7 @@ class DataTagging:
         try:
             if engine is not None:
                 df = pd.read_sql(
-                    "SELECT id, student_id, level, question, answer,answer_check_status, no_del, no_sub, no_mistakes, wcpm FROM parakh_v1_testdetail WHERE section='reading'",
+                    "SELECT id, student_id, level, question, answer,answer_check_status, no_del, no_sub, no_mistakes, no_mistakes_edited, wcpm FROM parakh_v1_testdetail WHERE section='reading'",
                     con=engine
                 )
             else:
@@ -77,7 +77,7 @@ class DataTagging:
                 conn = get_connection()
                 try:
                     df = pd.read_sql(
-                        "SELECT * FROM parakh_v1_testdetail WHERE section='reading'",
+                        "SELECT id, student_id, level, question, answer,answer_check_status, no_del, no_sub, no_mistakes, no_mistakes_edited, wcpm FROM parakh_v1_testdetail WHERE section='reading'",
                         con=conn
                     )
                 finally:
@@ -239,6 +239,81 @@ class DataTagging:
 
 
 
+    ################# Paragraph Level Tagging ######################################
+
+    def _categorize_paragraph_profile(self, row: pd.Series) -> str:
+        """Categorize the student's paragraph-level mistake pattern."""
+        mistakes = row.get('no_mistakes_edited', 0)
+        subs = row.get('no_sub', 0)
+        dels = row.get('no_del', 0)
+
+        if mistakes == 0:
+            return 'No Mistake'
+        elif mistakes < 3:
+            if subs > dels:
+                return 'Substitution Minor'
+            elif subs < dels:
+                return 'Deletion Minor'
+            return 'Mixed Minor'
+        elif 3 <= mistakes < 6:
+            if subs > dels:
+                return 'Substitution Moderate'
+            elif subs < dels:
+                return 'Deletion Moderate'
+            return 'Mixed Moderate'
+        elif mistakes >= 6:
+            if subs > dels:
+                return 'Substitution Dominant'
+            elif subs < dels:
+                return 'Deletion Dominant'
+            return 'Mixed Dominant'
+        return 'Uncategorized'
+    
+
+    def _tag_paragraph_level(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Applies tagging logic for paragraph-level responses."""
+        logging.info("Applying paragraph-level tagging...")
+
+        para_df = df[df.get('level') == 'Paragraph'].copy()
+        if para_df.empty:
+            logging.info("No 'Paragraph' level records found.")
+            return para_df
+
+        # Compute question length (number of words)
+        para_df['question_length'] = para_df['question'].apply(lambda x: len(str(x).split()))
+
+        # Apply classification logic
+        para_df['tags'] = para_df.apply(self._categorize_paragraph_profile, axis=1)
+
+        logging.info("Paragraph-level tagging completed.")
+        return para_df
+    
+
+    ################# STORY TAGGING #############################################
+
+    def _tag_story_level(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Applies tagging logic for story-level responses."""
+        logging.info("Applying story-level tagging...")
+
+        story_df = df[df.get('level') == 'Story'].copy()
+        if story_df.empty:
+            logging.info("No 'Story' level records found.")
+            return story_df
+
+        # Compute question length (number of words)
+        story_df['question_length'] = story_df['question'].apply(lambda x: len(str(x).split()))
+
+        # Apply classification logic
+        story_df['tags'] = story_df.apply(self._categorize_paragraph_profile, axis=1)
+
+        logging.info("Story-level tagging completed.")
+        return story_df
+    
+
+
+
+
+
     ################# Main Entry Point #############################################
     
     def initiate_data_tagging(self):
@@ -251,7 +326,8 @@ class DataTagging:
 
             letter_tagged = self._tag_letter_level(df)
             word_tagged = self._tag_word_level(df)
-
+            paragraph_tagged = self._tag_paragraph_level(df)
+            story_tagged = self._tag_story_level(df)
 
             # Save output
             if not letter_tagged.empty:
@@ -265,6 +341,17 @@ class DataTagging:
                 word_tagged.to_csv(self.config.wordPath, index=False)
                 logging.info(f"Word-level data saved to {self.config.wordPath}")
 
+
+            if not paragraph_tagged.empty:
+                os.makedirs(os.path.dirname(self.config.paragraphPath), exist_ok=True)
+                paragraph_tagged.to_csv(self.config.paragraphPath, index=False)
+                logging.info(f"Paragraph-level data saved to {self.config.paragraphPath}")
+
+
+            if not story_tagged.empty:
+                os.makedirs(os.path.dirname(self.config.storyPath), exist_ok=True)
+                story_tagged.to_csv(self.config.storyPath, index=False)
+                logging.info(f"Story-level data saved to {self.config.storyPath}")
 
             logging.info("Data tagging pipeline completed successfully.")
 
