@@ -1,0 +1,841 @@
+student_id,test_type,Profile,Fluency Band
+36,Baseline,Minor Decoding,
+40,Baseline,Major Decoding,
+41,Baseline,Minor Decoding,
+42,Baseline,Minor Decoding,
+43,Baseline,Minor Decoding,
+49,Baseline,Minor Decoding,
+54,Baseline,Major Decoding,
+57,Baseline,Minor Decoding,
+63,Baseline,Minor Decoding,
+79,Baseline,Major Decoding,
+80,Baseline,Minor Decoding,
+85,Baseline,Minor Decoding,
+93,Baseline,Minor Decoding,
+155,Baseline,Major Decoding,
+156,Baseline,Minor Decoding,
+159,Baseline,Minor Decoding,
+162,Baseline,Major Decoding,
+168,Baseline,Major Decoding,
+171,Baseline,Major Decoding,
+188,Baseline,Minor Decoding,
+194,Baseline,Minor Mixed,
+242,Baseline,Minor Decoding,
+248,Baseline,Minor Decoding,
+337,Baseline,Major Decoding,
+340,Baseline,Major Decoding,
+607,Baseline,Major Decoding,
+609,Baseline,Minor Decoding,
+610,Baseline,Minor Decoding,
+611,Baseline,Major Decoding,
+614,Baseline,Major Decoding,
+681,Baseline,Major Decoding,
+1003,Baseline,Minor Decoding,
+79,Baseline 2,Major Decoding,
+80,Baseline 2,Major Decoding,
+114,Baseline 2,Major Decoding,
+194,Baseline 2,Major Decoding,
+340,Baseline 2,Major Decoding,
+681,Baseline 2,Major Decoding,
+60,Endline 1,Minor Decoding,
+63,Endline 1,Minor Decoding,
+79,Endline 1,Major Decoding,
+80,Endline 1,Major Decoding,
+85,Endline 1,Major Decoding,
+93,Endline 1,Minor Decoding,
+107,Endline 1,Major Decoding,
+155,Endline 1,Major Decoding,
+156,Endline 1,Minor Decoding,
+162,Endline 1,Major Decoding,
+340,Endline 1,Minor Decoding,
+681,Endline 1,Major Decoding,
+63,Endline 2,Minor Decoding,
+162,Endline 2,Major Decoding,
+340,Endline 2,Major Decoding,
+79,Endline 3,Major Decoding,
+340,Endline 3,Major Decoding,
+34,Baseline,Minor Mixed,
+37,Baseline,Major Decoding,
+39,Baseline,Major Phonetic,
+46,Baseline,Major Decoding,
+51,Baseline,Minor Decoding,
+56,Baseline,Minor Decoding,
+62,Baseline,Minor Decoding,
+66,Baseline,Minor Mixed,
+68,Baseline,Minor Decoding,
+74,Baseline,Major Decoding,
+77,Baseline,Minor Decoding,
+82,Baseline,Major Decoding,
+88,Baseline,Major Phonetic,
+89,Baseline,Major Decoding,
+90,Baseline,Major Decoding,
+94,Baseline,Major Decoding,
+108,Baseline,Major Phonetic,
+158,Baseline,Major Decoding,
+174,Baseline,Major Phonetic,
+180,Baseline,Minor Decoding,
+201,Baseline,Minor Mixed,
+204,Baseline,Minor Phonetic,
+205,Baseline,Major Decoding,
+220,Baseline,Minor Decoding,
+243,Baseline,Major Decoding,
+244,Baseline,Minor Decoding,
+274,Baseline,Minor Decoding,
+279,Baseline,Major Decoding,
+281,Baseline,Minor Mixed,
+334,Baseline,Major Decoding,
+339,Baseline,Minor Phonetic,
+365,Baseline,Major Decoding,
+407,Baseline,Major Decoding,
+413,Baseline,Major Decoding,
+419,Baseline,Minor Mixed,
+460,Baseline,Major Decoding,
+604,Baseline,Major Decoding,
+605,Baseline,Major Decoding,
+606,Baseline,Major Decoding,
+608,Baseline,Minor Decoding,
+668,Baseline,Major Decoding,
+678,Baseline,Major Decoding,
+695,Baseline,Major Decoding,
+42,Baseline 2,Minor Decoding,
+43,Baseline 2,Minor Decoding,
+62,Baseline 2,Major Decoding,
+77,Baseline 2,Major Decoding,
+116,Baseline 2,Minor Decoding,
+121,Baseline 2,Major Decoding,
+152,Baseline 2,Minor Mixed,
+155,Baseline 2,Major Decoding,
+156,Baseline 2,Major Decoding,
+159,Baseline 2,Major Decoding,
+205,Baseline 2,Minor Decoding,
+243,Baseline 2,Major Decoding,
+339,Baseline 2,Minor Decoding,
+413,Baseline 2,Major Phonetic,
+605,Baseline 2,Major Decoding,
+668,Baseline 2,Major Decoding,
+36,Endline 1,Major Decoding,
+37,Endline 1,Major Decoding,
+41,Endline 1,Minor Decoding,
+51,Endline 1,Minor Decoding,
+53,Endline 1,Minor Decoding,
+54,Endline 1,Minor Decoding,
+56,Endline 1,Major Decoding,
+57,Endline 1,Minor Decoding,
+62,Endline 1,Minor Decoding,
+67,Endline 1,Major Decoding,
+68,Endline 1,Major Decoding,
+74,Endline 1,Major Decoding,
+75,Endline 1,Minor Mixed,
+76,Endline 1,Major Decoding,
+77,Endline 1,Minor Decoding,
+82,Endline 1,Major Decoding,
+88,Endline 1,Minor Mixed,
+89,Endline 1,Major Decoding,
+91,Endline 1,Major Decoding,
+108,Endline 1,Minor Decoding,
+114,Endline 1,Major Decoding,
+116,Endline 1,Major Decoding,
+152,Endline 1,Minor Decoding,
+153,Endline 1,Minor Decoding,
+158,Endline 1,Major Decoding,
+159,Endline 1,Major Decoding,
+174,Endline 1,Major Decoding,
+194,Endline 1,Major Decoding,
+201,Endline 1,Major Decoding,
+242,Endline 1,Major Phonetic,
+243,Endline 1,Major Decoding,
+248,Endline 1,Minor Mixed,
+274,Endline 1,Minor Mixed,
+279,Endline 1,Major Decoding,
+333,Endline 1,Minor Mixed,
+365,Endline 1,Major Decoding,
+407,Endline 1,Major Decoding,
+413,Endline 1,Minor Decoding,
+460,Endline 1,Major Decoding,
+604,Endline 1,Major Decoding,
+605,Endline 1,Major Decoding,
+606,Endline 1,Major Decoding,
+609,Endline 1,Minor Decoding,
+610,Endline 1,Major Decoding,
+611,Endline 1,Major Mixed,
+614,Endline 1,Major Decoding,
+668,Endline 1,Major Decoding,
+695,Endline 1,Major Mixed,
+1154,Endline 1,Minor Mixed,
+1268,Endline 1,Minor Mixed,
+1310,Endline 1,Minor Mixed,
+1324,Endline 1,Minor Phonetic,
+1333,Endline 1,Major Decoding,
+1351,Endline 1,Minor Decoding,
+40,Endline 2,Major Decoding,
+41,Endline 2,Minor Decoding,
+42,Endline 2,Major Decoding,
+43,Endline 2,Major Decoding,
+59,Endline 2,Minor Mixed,
+60,Endline 2,Minor Decoding,
+79,Endline 2,Major Decoding,
+114,Endline 2,Major Mixed,
+116,Endline 2,Major Decoding,
+152,Endline 2,Minor Mixed,
+155,Endline 2,Major Decoding,
+156,Endline 2,Major Decoding,
+159,Endline 2,Major Decoding,
+194,Endline 2,Major Decoding,
+232,Endline 2,Minor Decoding,
+279,Endline 2,Major Decoding,
+365,Endline 2,Major Decoding,
+407,Endline 2,Minor Decoding,
+695,Endline 2,Major Decoding,
+40,Endline 3,Minor Decoding,
+59,Endline 3,Minor Decoding,
+63,Endline 3,Minor Decoding,
+89,Endline 3,Major Decoding,
+155,Endline 3,Major Decoding,
+156,Endline 3,Major Decoding,
+159,Endline 3,Major Decoding,
+194,Endline 3,Major Decoding,
+279,Endline 3,Major Decoding,
+606,Endline 3,Major Decoding,
+1268,Endline 3,Minor Decoding,
+156,Endline 4,Major Decoding,
+340,Endline 4,Major Decoding,
+33,Baseline,Substitution Moderate,Low wcpm
+35,Baseline,No Mistake,Low wcpm
+45,Baseline,No Mistake,Low wcpm
+48,Baseline,Substitution Minor,Low wcpm
+72,Baseline,Deletion Dominant,High wcpm
+75,Baseline,Substitution Dominant,Low wcpm
+83,Baseline,Substitution Moderate,Low wcpm
+84,Baseline,Substitution Dominant,Low wcpm
+86,Baseline,Substitution Minor,Low wcpm
+87,Baseline,Substitution Minor,Low wcpm
+109,Baseline,Substitution Minor,Low wcpm
+110,Baseline,Substitution Moderate,Low wcpm
+184,Baseline,Substitution Moderate,Mid wcpm
+172,Baseline,Substitution Minor,Low wcpm
+170,Baseline,Substitution Dominant,Low wcpm
+163,Baseline,Substitution Minor,Low wcpm
+165,Baseline,Substitution Dominant,Low wcpm
+189,Baseline,No Mistake,Low wcpm
+263,Baseline,Substitution Dominant,Low wcpm
+275,Baseline,Substitution Moderate,Mid wcpm
+278,Baseline,Substitution Moderate,Low wcpm
+169,Baseline,Substitution Minor,Low wcpm
+213,Baseline,Substitution Dominant,Low wcpm
+241,Baseline,Deletion Dominant,Low wcpm
+333,Baseline,Mixed Dominant,Low wcpm
+335,Baseline,Deletion Dominant,Low wcpm
+566,Baseline,Substitution Moderate,Low wcpm
+191,Baseline,Substitution Dominant,Low wcpm
+338,Baseline,Substitution Dominant,Low wcpm
+377,Baseline,Substitution Moderate,Low wcpm
+186,Baseline,Substitution Moderate,Low wcpm
+232,Baseline,Deletion Dominant,Low wcpm
+343,Baseline,No Mistake,Low wcpm
+352,Baseline,Substitution Minor,Low wcpm
+362,Baseline,Substitution Minor,Low wcpm
+361,Baseline,Substitution Minor,Low wcpm
+696,Baseline,Substitution Dominant,Low wcpm
+697,Baseline,Substitution Minor,Low wcpm
+612,Baseline,Mixed Moderate,Low wcpm
+190,Baseline,Substitution Dominant,Low wcpm
+921,Baseline,Deletion Dominant,Low wcpm
+1008,Baseline,Substitution Minor,Mid wcpm
+182,Baseline,Substitution Minor,Low wcpm
+1092,Baseline,Substitution Dominant,Low wcpm
+1134,Endline 1,No Mistake,High wcpm
+1151,Endline 2,Deletion Dominant,Mid wcpm
+1153,Endline 2,Deletion Dominant,Mid wcpm
+1160,Endline 3,Deletion Dominant,Mid wcpm
+1163,Endline 2,Deletion Dominant,High wcpm
+999,Baseline,Deletion Dominant,High wcpm
+115,Baseline,Substitution Minor,Low wcpm
+1213,Endline 1,Substitution Dominant,Low wcpm
+921,Endline 1,Substitution Dominant,Low wcpm
+460,Endline 1,Mixed Moderate,Mid wcpm
+608,Endline 1,Substitution Dominant,Low wcpm
+612,Endline 1,Deletion Moderate,Mid wcpm
+419,Endline 1,Substitution Moderate,Low wcpm
+48,Endline 1,No Mistake,Low wcpm
+83,Endline 1,Substitution Moderate,Low wcpm
+84,Endline 1,Substitution Dominant,Low wcpm
+72,Endline 1,Deletion Dominant,Low wcpm
+75,Endline 1,Substitution Moderate,Low wcpm
+33,Endline 1,Deletion Dominant,Low wcpm
+35,Endline 1,Substitution Minor,Low wcpm
+45,Endline 1,Deletion Moderate,Low wcpm
+34,Endline 1,Substitution Dominant,Low wcpm
+190,Endline 1,Substitution Dominant,Low wcpm
+191,Endline 1,Substitution Dominant,Low wcpm
+204,Endline 1,Mixed Minor,Low wcpm
+169,Endline 1,No Mistake,Low wcpm
+1092,Endline 1,No Mistake,Low wcpm
+213,Endline 1,Substitution Moderate,Low wcpm
+244,Endline 1,Substitution Dominant,Low wcpm
+109,Endline 1,No Mistake,Low wcpm
+110,Endline 1,Substitution Moderate,Low wcpm
+90,Endline 1,Substitution Dominant,Low wcpm
+165,Endline 1,Deletion Dominant,Low wcpm
+220,Endline 1,Substitution Dominant,Low wcpm
+275,Endline 1,Deletion Dominant,Low wcpm
+39,Endline 1,Deletion Moderate,Low wcpm
+180,Endline 1,Substitution Minor,Low wcpm
+172,Endline 1,Substitution Moderate,Low wcpm
+361,Endline 1,Substitution Moderate,Low wcpm
+678,Endline 1,Substitution Minor,Low wcpm
+205,Endline 1,Substitution Dominant,Low wcpm
+232,Endline 1,Deletion Dominant,High wcpm
+999,Endline 1,Substitution Minor,Low wcpm
+281,Endline 1,Deletion Dominant,Low wcpm
+73,Endline 1,Substitution Dominant,High wcpm
+696,Endline 1,Substitution Moderate,Low wcpm
+1014,Baseline,Deletion Dominant,High wcpm
+37,Endline 2,Substitution Moderate,Low wcpm
+39,Endline 2,Substitution Dominant,Low wcpm
+36,Endline 2,Deletion Dominant,Low wcpm
+34,Endline 2,Substitution Minor,Low wcpm
+362,Endline 2,Deletion Dominant,Low wcpm
+921,Endline 2,Substitution Dominant,Low wcpm
+1269,Baseline,Deletion Dominant,Low wcpm
+73,Endline 2,Substitution Moderate,Low wcpm
+1271,Endline 1,Deletion Dominant,High wcpm
+1268,Endline 2,Deletion Moderate,High wcpm
+54,Endline 2,Substitution Dominant,Low wcpm
+84,Endline 2,Substitution Moderate,Low wcpm
+66,Endline 2,Deletion Dominant,Low wcpm
+72,Endline 2,No Mistake,Low wcpm
+609,Endline 2,Substitution Moderate,Low wcpm
+604,Endline 2,Substitution Dominant,Low wcpm
+678,Endline 2,Substitution Moderate,Low wcpm
+614,Endline 2,Substitution Moderate,Low wcpm
+460,Endline 2,Substitution Dominant,Low wcpm
+610,Endline 2,Substitution Moderate,Low wcpm
+204,Endline 2,Mixed Minor,Low wcpm
+190,Endline 2,Substitution Minor,Low wcpm
+338,Endline 2,Substitution Moderate,Low wcpm
+696,Endline 2,Substitution Moderate,Low wcpm
+191,Endline 2,Substitution Moderate,Low wcpm
+611,Endline 2,Substitution Moderate,Low wcpm
+56,Endline 2,Deletion Dominant,Low wcpm
+201,Endline 2,Deletion Dominant,Low wcpm
+242,Endline 2,Substitution Dominant,Low wcpm
+248,Endline 2,Substitution Dominant,Low wcpm
+274,Endline 2,Substitution Dominant,Low wcpm
+68,Endline 2,Deletion Dominant,Low wcpm
+74,Endline 2,Substitution Dominant,High wcpm
+82,Endline 2,Deletion Dominant,High wcpm
+243,Endline 2,Deletion Dominant,High wcpm
+88,Endline 2,Substitution Moderate,Low wcpm
+162,Baseline 2,Deletion Dominant,Mid wcpm
+66,Baseline 2,Mixed Dominant,Low wcpm
+72,Baseline 2,Substitution Moderate,Low wcpm
+84,Baseline 2,Substitution Moderate,Low wcpm
+108,Baseline 2,Substitution Dominant,Low wcpm
+88,Baseline 2,Substitution Minor,Low wcpm
+191,Baseline 2,Substitution Moderate,Low wcpm
+34,Baseline 2,No Mistake,Low wcpm
+248,Baseline 2,Substitution Dominant,Low wcpm
+242,Baseline 2,Substitution Moderate,Low wcpm
+201,Baseline 2,Substitution Moderate,Low wcpm
+274,Baseline 2,Substitution Moderate,Mid wcpm
+365,Baseline 2,Deletion Dominant,Low wcpm
+362,Baseline 2,Substitution Minor,Low wcpm
+361,Baseline 2,Substitution Minor,Low wcpm
+678,Baseline 2,Deletion Dominant,Low wcpm
+232,Baseline 2,Deletion Dominant,Low wcpm
+343,Baseline 2,Deletion Moderate,Low wcpm
+115,Baseline 2,Substitution Dominant,Low wcpm
+696,Baseline 2,Substitution Dominant,Low wcpm
+695,Baseline 2,Deletion Dominant,Low wcpm
+39,Baseline 2,Substitution Moderate,Low wcpm
+46,Baseline 2,Deletion Dominant,Low wcpm
+37,Baseline 2,Substitution Dominant,Low wcpm
+36,Baseline 2,Mixed Dominant,Low wcpm
+610,Baseline 2,Substitution Dominant,Low wcpm
+73,Baseline 2,Substitution Dominant,Low wcpm
+204,Baseline 2,Substitution Moderate,Low wcpm
+190,Baseline 2,Substitution Minor,Low wcpm
+1157,Baseline,Deletion Dominant,High wcpm
+66,Endline 3,Mixed Moderate,Low wcpm
+39,Endline 3,Substitution Moderate,Low wcpm
+1315,Baseline,Deletion Dominant,High wcpm
+1315,Endline 1,Deletion Dominant,High wcpm
+1275,Endline 1,Deletion Dominant,High wcpm
+37,Endline 3,Substitution Dominant,Low wcpm
+1275,Baseline,Deletion Dominant,High wcpm
+1316,Endline 1,Deletion Dominant,Mid wcpm
+1316,Endline 4,Deletion Dominant,High wcpm
+159,Endline 4,Deletion Moderate,High wcpm
+1316,Endline 2,Deletion Dominant,High wcpm
+36,Endline 3,Substitution Dominant,Low wcpm
+191,Endline 3,Substitution Moderate,Low wcpm
+609,Baseline 2,Substitution Moderate,Low wcpm
+611,Baseline 2,Substitution Moderate,Low wcpm
+614,Baseline 2,Substitution Moderate,Low wcpm
+174,Baseline 2,Substitution Dominant,Low wcpm
+921,Baseline 2,Substitution Dominant,Low wcpm
+43,Endline 3,Deletion Dominant,Low wcpm
+162,Endline 3,Substitution Dominant,Low wcpm
+191,Endline 4,Substitution Dominant,Low wcpm
+365,Endline 3,Substitution Minor,Low wcpm
+407,Endline 3,Substitution Dominant,Low wcpm
+413,Endline 3,Substitution Moderate,Low wcpm
+114,Endline 3,Substitution Dominant,Low wcpm
+232,Endline 3,Deletion Dominant,Low wcpm
+668,Endline 3,Deletion Dominant,Low wcpm
+605,Endline 3,Substitution Moderate,Low wcpm
+159,Endline 4,Deletion Dominant,Mid wcpm
+79,Endline 4,Deletion Dominant,Low wcpm
+155,Endline 4,Deletion Dominant,Low wcpm
+1316,Endline,Deletion Dominant,High wcpm
+1330,Midline,No Mistake,Low wcpm
+1351,Baseline,No Mistake,High wcpm
+58,Baseline,Substitution Dominant,Mid wcpm
+61,Baseline,Substitution Moderate,Low wcpm
+65,Baseline,Substitution Moderate,Mid wcpm
+55,Baseline,Deletion Dominant,Low wcpm
+91,Baseline,Substitution Dominant,Low wcpm
+98,Baseline,Substitution Dominant,Low wcpm
+100,Baseline,Substitution Minor,Mid wcpm
+104,Baseline,Substitution Moderate,Low wcpm
+175,Baseline,Substitution Moderate,Mid wcpm
+176,Baseline,Deletion Dominant,Low wcpm
+177,Baseline,Substitution Dominant,Low wcpm
+179,Baseline,Substitution Moderate,Mid wcpm
+183,Baseline,Substitution Dominant,Mid wcpm
+52,Baseline,Substitution Moderate,Mid wcpm
+157,Baseline,Substitution Dominant,Low wcpm
+193,Baseline,Substitution Minor,Low wcpm
+363,Baseline,Deletion Dominant,Low wcpm
+613,Baseline,Substitution Dominant,Low wcpm
+160,Baseline,Substitution Minor,Low wcpm
+166,Baseline,Deletion Dominant,Low wcpm
+344,Baseline,Substitution Minor,Low wcpm
+360,Baseline,Deletion Dominant,Low wcpm
+920,Baseline,Substitution Moderate,Mid wcpm
+1004,Baseline,Substitution Moderate,Mid wcpm
+1151,Endline 1,Mixed Moderate,High wcpm
+1152,Endline 2,Deletion Dominant,High wcpm
+1157,Endline 2,Deletion Moderate,High wcpm
+1163,Baseline,Deletion Dominant,High wcpm
+113,Baseline,Substitution Dominant,Mid wcpm
+1212,Baseline,Substitution Moderate,Low wcpm
+277,Baseline,Substitution Moderate,Mid wcpm
+160,Endline 1,Substitution Dominant,Low wcpm
+65,Endline 1,Substitution Dominant,Low wcpm
+61,Endline 1,Deletion Dominant,Low wcpm
+377,Endline 1,Substitution Dominant,Low wcpm
+166,Endline 1,Substitution Dominant,Low wcpm
+55,Endline 1,Deletion Dominant,Low wcpm
+241,Endline 1,Deletion Dominant,Low wcpm
+566,Endline 1,Substitution Dominant,Low wcpm
+192,Endline 1,Substitution Moderate,Mid wcpm
+189,Endline 1,Substitution Dominant,Low wcpm
+263,Endline 1,Substitution Dominant,Low wcpm
+278,Endline 1,Substitution Dominant,Low wcpm
+98,Endline 1,Substitution Dominant,Mid wcpm
+100,Endline 1,Substitution Dominant,Mid wcpm
+94,Endline 1,Substitution Dominant,Low wcpm
+177,Endline 1,Substitution Minor,Low wcpm
+179,Endline 1,Substitution Moderate,Mid wcpm
+182,Endline 1,Substitution Dominant,Low wcpm
+184,Endline 1,Deletion Dominant,Low wcpm
+113,Endline 1,Substitution Dominant,Low wcpm
+115,Endline 1,Substitution Moderate,Low wcpm
+344,Endline 1,Substitution Moderate,Low wcpm
+277,Endline 1,Substitution Moderate,Low wcpm
+352,Endline 1,Substitution Minor,Low wcpm
+338,Endline 1,Mixed Minor,Low wcpm
+163,Endline 1,Substitution Dominant,Low wcpm
+360,Endline 1,Substitution Dominant,Low wcpm
+33,Endline 2,No Mistake,Low wcpm
+999,Endline 2,Substitution Minor,Low wcpm
+35,Endline 2,Substitution Moderate,Low wcpm
+361,Endline 2,Substitution Dominant,Low wcpm
+1268,Endline 4,Deletion Dominant,High wcpm
+1268,Baseline,Deletion Dominant,High wcpm
+1213,Endline 2,Deletion Dominant,Low wcpm
+45,Endline 2,Deletion Dominant,Low wcpm
+110,Endline 2,Substitution Dominant,Low wcpm
+109,Endline 2,Substitution Dominant,Low wcpm
+169,Endline 2,Substitution Moderate,Low wcpm
+90,Endline 2,Substitution Dominant,Low wcpm
+241,Endline 2,Substitution Dominant,Low wcpm
+83,Endline 2,Substitution Dominant,Mid wcpm
+75,Endline 2,Substitution Moderate,Low wcpm
+48,Endline 2,Substitution Minor,Low wcpm
+275,Endline 2,Deletion Dominant,Low wcpm
+608,Endline 2,Deletion Dominant,Low wcpm
+343,Endline 2,Deletion Dominant,Low wcpm
+419,Endline 2,Substitution Dominant,Low wcpm
+166,Endline 2,Substitution Minor,Low wcpm
+98,Endline 2,Substitution Dominant,Low wcpm
+612,Endline 2,Deletion Moderate,Low wcpm
+220,Endline 2,Substitution Dominant,Low wcpm
+281,Endline 2,Substitution Dominant,Low wcpm
+278,Endline 2,Substitution Dominant,Low wcpm
+244,Endline 2,Deletion Dominant,Low wcpm
+108,Endline 2,Substitution Dominant,Low wcpm
+1213,Baseline 2,Substitution Dominant,Low wcpm
+48,Baseline 2,Substitution Minor,Low wcpm
+83,Baseline 2,Deletion Dominant,Low wcpm
+75,Baseline 2,Substitution Dominant,Low wcpm
+109,Baseline 2,Substitution Moderate,Low wcpm
+110,Baseline 2,Substitution Dominant,Low wcpm
+169,Baseline 2,Deletion Dominant,Low wcpm
+213,Baseline 2,Substitution Dominant,Low wcpm
+241,Baseline 2,Substitution Moderate,Low wcpm
+244,Baseline 2,Deletion Dominant,Low wcpm
+90,Baseline 2,Substitution Dominant,Low wcpm
+220,Baseline 2,Deletion Dominant,Low wcpm
+275,Baseline 2,Substitution Dominant,Low wcpm
+338,Baseline 2,Substitution Moderate,Low wcpm
+33,Baseline 2,Substitution Moderate,Low wcpm
+278,Baseline 2,Substitution Dominant,Mid wcpm
+189,Baseline 2,Substitution Dominant,Low wcpm
+281,Baseline 2,Substitution Dominant,Low wcpm
+1292,Baseline 2,Mixed Dominant,Low wcpm
+277,Baseline 2,Substitution Dominant,Low wcpm
+999,Baseline 2,Deletion Dominant,Low wcpm
+35,Baseline 2,Substitution Dominant,Low wcpm
+53,Endline 3,Substitution Dominant,Low wcpm
+73,Endline 3,Deletion Dominant,Low wcpm
+57,Endline 3,Deletion Dominant,Low wcpm
+1294,Endline 1,Mixed Dominant,Low wcpm
+1294,Baseline,Mixed Dominant,Low wcpm
+352,Endline 2,Substitution Minor,Low wcpm
+102,Baseline 2,Substitution Dominant,Low wcpm
+1213,Endline 3,Deletion Dominant,Low wcpm
+921,Endline 3,Deletion Dominant,Low wcpm
+72,Endline 3,Deletion Dominant,Low wcpm
+84,Endline 3,Substitution Dominant,Mid wcpm
+177,Baseline 2,Substitution Dominant,Low wcpm
+34,Endline 3,Substitution Moderate,Low wcpm
+1014,Endline 1,Deletion Dominant,High wcpm
+1303,Baseline,Deletion Dominant,High wcpm
+1316,Baseline,Deletion Dominant,Low wcpm
+338,Endline 3,Substitution Dominant,Low wcpm
+190,Endline 3,Substitution Dominant,Low wcpm
+204,Endline 3,Substitution Dominant,Low wcpm
+612,Baseline 2,Deletion Dominant,Low wcpm
+460,Baseline 2,Deletion Dominant,Low wcpm
+608,Baseline 2,Deletion Dominant,Low wcpm
+182,Baseline 2,Substitution Dominant,Low wcpm
+419,Baseline 2,Substitution Dominant,Low wcpm
+45,Endline 3,Substitution Dominant,Low wcpm
+46,Endline 3,Deletion Dominant,Low wcpm
+190,Endline 4,Substitution Moderate,Low wcpm
+108,Endline 4,Substitution Dominant,Low wcpm
+43,Endline 4,Deletion Dominant,Low wcpm
+42,Endline 4,Deletion Dominant,Low wcpm
+39,Endline 4,Substitution Moderate,Low wcpm
+46,Endline 4,Deletion Dominant,Low wcpm
+36,Endline 4,Deletion Dominant,Low wcpm
+41,Endline 4,Deletion Dominant,Low wcpm
+419,Endline 3,Substitution Moderate,Low wcpm
+610,Endline 3,Substitution Dominant,Low wcpm
+108,Endline 3,Substitution Dominant,Low wcpm
+88,Endline 3,Deletion Dominant,Low wcpm
+90,Endline 3,Substitution Dominant,Low wcpm
+244,Endline 3,Substitution Dominant,Low wcpm
+361,Endline 3,Substitution Dominant,Low wcpm
+361,Endline 3,Substitution Dominant,Low wcpm
+678,Endline 3,Substitution Dominant,Low wcpm
+696,Endline 3,Substitution Dominant,Low wcpm
+277,Endline 3,Substitution Dominant,Low wcpm
+115,Endline 3,Substitution Dominant,Low wcpm
+343,Endline 3,Deletion Dominant,Low wcpm
+610,Endline 4,Substitution Moderate,Low wcpm
+611,Endline 3,Substitution Dominant,Low wcpm
+201,Endline 3,Substitution Moderate,Low wcpm
+242,Endline 3,Mixed Minor,Low wcpm
+189,Endline 3,Mixed Minor,Low wcpm
+248,Endline 3,Deletion Dominant,Low wcpm
+278,Endline 3,Substitution Dominant,Low wcpm
+57,Endline 4,Substitution Dominant,Low wcpm
+73,Endline 4,Substitution Dominant,Low wcpm
+921,Endline 4,Substitution Dominant,Low wcpm
+162,Endline 4,Deletion Dominant,Mid wcpm
+106,Endline 4,Deletion Dominant,Low wcpm
+1279,Baseline,Deletion Dominant,High wcpm
+1327,Midline,Deletion Dominant,High wcpm
+204,Endline 4,Substitution Dominant,Low wcpm
+47,Baseline,No Mistake,High wcpm
+78,Baseline,Substitution Minor,Mid wcpm
+97,Baseline,Substitution Minor,Mid wcpm
+167,Baseline,No Mistake,Mid wcpm
+154,Baseline,No Mistake,High wcpm
+161,Baseline,Substitution Moderate,Mid wcpm
+164,Baseline,Substitution Minor,Mid wcpm
+185,Baseline,Substitution Minor,Low wcpm
+187,Baseline,Substitution Moderate,High wcpm
+454,Baseline,Substitution Minor,Mid wcpm
+493,Baseline,Substitution Moderate,Mid wcpm
+276,Baseline,No Mistake,Mid wcpm
+341,Baseline,Substitution Minor,Mid wcpm
+679,Baseline,Substitution Minor,High wcpm
+1157,Baseline,Deletion Minor,High wcpm
+1157,Endline 1,No Mistake,High wcpm
+1162,Baseline,No Mistake,High wcpm
+52,Endline 1,No Mistake,Mid wcpm
+157,Endline 1,Substitution Moderate,Mid wcpm
+920,Endline 1,Substitution Moderate,Mid wcpm
+1212,Endline 1,Substitution Moderate,Mid wcpm
+167,Endline 1,Substitution Minor,Low wcpm
+47,Endline 1,Deletion Moderate,High wcpm
+78,Endline 1,Substitution Moderate,Mid wcpm
+154,Endline 1,No Mistake,Mid wcpm
+363,Endline 1,Substitution Minor,Mid wcpm
+613,Endline 1,Substitution Moderate,Mid wcpm
+493,Endline 1,Substitution Minor,Mid wcpm
+164,Endline 1,No Mistake,Mid wcpm
+187,Endline 1,Mixed Minor,High wcpm
+161,Endline 1,Substitution Minor,Mid wcpm
+193,Endline 1,No Mistake,Mid wcpm
+97,Endline 1,No Mistake,High wcpm
+104,Endline 1,Substitution Minor,Mid wcpm
+175,Endline 1,Substitution Minor,Mid wcpm
+341,Endline 1,Substitution Minor,Mid wcpm
+454,Endline 1,Deletion Moderate,Mid wcpm
+183,Endline 1,Substitution Minor,Mid wcpm
+679,Endline 1,Substitution Minor,High wcpm
+1212,Endline 2,Substitution Minor,Low wcpm
+920,Endline 2,Substitution Moderate,Mid wcpm
+157,Endline 2,No Mistake,Mid wcpm
+920,Endline 2,Mixed Moderate,Mid wcpm
+192,Endline 2,Substitution Minor,Mid wcpm
+94,Endline 2,Substitution Minor,Mid wcpm
+377,Endline 2,Substitution Dominant,Low wcpm
+65,Endline 2,Substitution Moderate,Mid wcpm
+58,Endline 2,Deletion Minor,Mid wcpm
+167,Endline 2,No Mistake,Mid wcpm
+47,Endline 2,No Mistake,High wcpm
+78,Endline 2,Deletion Dominant,Mid wcpm
+61,Endline 2,Substitution Minor,Low wcpm
+164,Endline 2,Substitution Moderate,Mid wcpm
+161,Endline 2,No Mistake,High wcpm
+679,Endline 2,Substitution Minor,High wcpm
+187,Endline 2,Substitution Moderate,Mid wcpm
+55,Endline 2,Substitution Minor,Low wcpm
+344,Endline 2,Substitution Minor,Low wcpm
+97,Endline 2,No Mistake,High wcpm
+104,Endline 2,Substitution Moderate,Mid wcpm
+100,Endline 2,Substitution Minor,Mid wcpm
+493,Endline 2,No Mistake,Mid wcpm
+363,Endline 2,Deletion Moderate,Mid wcpm
+454,Endline 2,Substitution Minor,Mid wcpm
+613,Endline 2,Substitution Moderate,Mid wcpm
+193,Endline 2,Substitution Minor,Mid wcpm
+163,Endline 2,Deletion Minor,Low wcpm
+165,Endline 2,Substitution Minor,Mid wcpm
+263,Endline 2,No Mistake,Mid wcpm
+341,Endline 2,No Mistake,Mid wcpm
+213,Endline 2,No Mistake,Mid wcpm
+566,Endline 2,Substitution Moderate,Low wcpm
+1092,Endline 2,Substitution Minor,Mid wcpm
+920,Baseline 2,Substitution Minor,Mid wcpm
+154,Baseline 2,Substitution Minor,Mid wcpm
+65,Baseline 2,Substitution Minor,Mid wcpm
+167,Baseline 2,No Mistake,Mid wcpm
+1092,Baseline 2,Substitution Minor,Mid wcpm
+192,Baseline 2,No Mistake,Mid wcpm
+566,Baseline 2,Deletion Minor,Mid wcpm
+98,Baseline 2,Substitution Moderate,Mid wcpm
+100,Baseline 2,Substitution Minor,Mid wcpm
+97,Baseline 2,Deletion Minor,High wcpm
+104,Baseline 2,No Mistake,High wcpm
+193,Baseline 2,Substitution Minor,Mid wcpm
+263,Baseline 2,No Mistake,High wcpm
+163,Baseline 2,Substitution Minor,Mid wcpm
+161,Baseline 2,Substitution Moderate,Mid wcpm
+164,Baseline 2,Substitution Minor,Mid wcpm
+165,Baseline 2,Substitution Minor,Mid wcpm
+1292,Endline 3,No Mistake,Low wcpm
+1292,Endline 4,No Mistake,High wcpm
+48,Endline 3,Substitution Minor,Low wcpm
+341,Baseline 2,Substitution Minor,Mid wcpm
+154,Endline 2,No Mistake,Mid wcpm
+52,Endline 2,Substitution Minor,Mid wcpm
+58,Baseline 2,Substitution Minor,Mid wcpm
+47,Baseline 2,Substitution Moderate,Mid wcpm
+1279,Endline 3,No Mistake,Low wcpm
+157,Endline 3,No Mistake,Mid wcpm
+920,Endline 3,Substitution Moderate,Low wcpm
+154,Endline 3,Substitution Minor,High wcpm
+187,Baseline 2,No Mistake,High wcpm
+94,Baseline 2,Substitution Moderate,Mid wcpm
+1212,Baseline 2,Substitution Moderate,Mid wcpm
+679,Baseline 2,Substitution Minor,Mid wcpm
+213,Baseline 2,Mixed Minor,Mid wcpm
+94,Endline 3,Substitution Moderate,Mid wcpm
+104,Endline 3,Substitution Minor,High wcpm
+100,Endline 3,Substitution Moderate,Mid wcpm
+98,Endline 3,Substitution Moderate,Mid wcpm
+102,Endline 3,No Mistake,Mid wcpm
+113,Endline 2,Substitution Minor,Low wcpm
+1279,Endline 4,No Mistake,High wcpm
+174,Endline 3,Substitution Minor,Low wcpm
+184,Endline 3,Substitution Moderate,Low wcpm
+83,Endline 3,Substitution Minor,High wcpm
+75,Endline 3,Substitution Minor,Mid wcpm
+179,Endline 3,Substitution Moderate,Mid wcpm
+180,Endline 3,Substitution Minor,Mid wcpm
+181,Endline 3,No Mistake,High wcpm
+182,Endline 3,Substitution Dominant,Low wcpm
+52,Baseline 2,Substitution Minor,Mid wcpm
+183,Endline 3,Deletion Minor,Mid wcpm
+179,Baseline 2,Substitution Minor,High wcpm
+176,Baseline 2,Substitution Minor,Low wcpm
+175,Endline 3,No Mistake,High wcpm
+178,Endline 3,Substitution Minor,Mid wcpm
+177,Endline 3,Substitution Moderate,Mid wcpm
+176,Endline 3,No Mistake,Mid wcpm
+173,Endline 3,Substitution Moderate,Mid wcpm
+172,Endline 3,Substitution Moderate,Low wcpm
+113,Baseline 2,No Mistake,Mid wcpm
+1314,Baseline 2,No Mistake,Low wcpm
+33,Endline 3,Substitution Moderate,Low wcpm
+999,Endline 3,Substitution Minor,Mid wcpm
+91,Endline 3,Substitution Minor,Mid wcpm
+91,Endline 2,Substitution Moderate,Low wcpm
+1316,Endline 3,Deletion Moderate,High wcpm
+35,Endline 3,Substitution Minor,Mid wcpm
+167,Endline 3,Substitution Minor,Mid wcpm
+65,Endline 3,Substitution Minor,Mid wcpm
+1305,Endline 3,No Mistake,Low wcpm
+47,Endline 3,No Mistake,High wcpm
+187,Endline 3,No Mistake,High wcpm
+363,Baseline 2,Substitution Minor,Mid wcpm
+493,Baseline 2,Substitution Moderate,High wcpm
+454,Baseline 2,Substitution Minor,Mid wcpm
+377,Baseline 2,Substitution Moderate,Low wcpm
+613,Baseline 2,Substitution Minor,Mid wcpm
+180,Baseline 2,Deletion Dominant,Low wcpm
+173,Baseline 2,Substitution Moderate,Mid wcpm
+183,Baseline 2,Substitution Moderate,Mid wcpm
+184,Baseline 2,Substitution Moderate,Mid wcpm
+181,Baseline 2,Substitution Minor,High wcpm
+178,Baseline 2,Substitution Moderate,Low wcpm
+175,Baseline 2,Substitution Minor,Mid wcpm
+164,Endline 3,No Mistake,Mid wcpm
+157,Baseline 2,Substitution Minor,Mid wcpm
+52,Endline 3,No Mistake,Mid wcpm
+679,Endline 3,No Mistake,High wcpm
+78,Endline 3,Substitution Minor,Mid wcpm
+187,Endline 4,Substitution Minor,High wcpm
+88,Endline 4,Substitution Moderate,Low wcpm
+1092,Endline 4,Substitution Minor,Mid wcpm
+110,Endline 4,Deletion Minor,Mid wcpm
+109,Endline 4,Substitution Moderate,Mid wcpm
+169,Endline 4,Substitution Minor,Low wcpm
+241,Endline 4,Substitution Minor,Mid wcpm
+566,Endline 4,Deletion Moderate,Mid wcpm
+192,Endline 4,No Mistake,Mid wcpm
+999,Endline 4,Substitution Minor,Low wcpm
+45,Endline 4,Substitution Moderate,Low wcpm
+33,Endline 4,Substitution Minor,Mid wcpm
+34,Endline 4,Substitution Minor,Low wcpm
+37,Endline 4,Substitution Moderate,Mid wcpm
+35,Endline 4,No Mistake,Low wcpm
+679,Endline 4,No Mistake,High wcpm
+164,Endline 4,Substitution Minor,High wcpm
+161,Endline 4,Substitution Moderate,Mid wcpm
+363,Endline 3,No Mistake,Mid wcpm
+377,Endline 3,Substitution Moderate,Mid wcpm
+493,Endline 3,Substitution Minor,Mid wcpm
+454,Endline 3,No Mistake,High wcpm
+460,Endline 3,No Mistake,Mid wcpm
+612,Endline 3,Substitution Minor,Mid wcpm
+614,Endline 3,Substitution Minor,Mid wcpm
+609,Endline 3,Mixed Minor,Low wcpm
+608,Endline 3,Substitution Minor,High wcpm
+90,Endline 4,Substitution Moderate,Low wcpm
+108,Endline 4,Substitution Moderate,Low wcpm
+614,Endline 4,Substitution Minor,Mid wcpm
+608,Endline 4,No Mistake,High wcpm
+1092,Endline 3,No Mistake,Mid wcpm
+109,Endline 3,Substitution Minor,Mid wcpm
+192,Endline 3,No Mistake,Mid wcpm
+110,Endline 3,Substitution Minor,Mid wcpm
+192,Endline 3,Substitution Minor,Mid wcpm
+493,Endline 4,Deletion Minor,High wcpm
+454,Endline 4,No Mistake,Mid wcpm
+613,Endline 4,No Mistake,High wcpm
+460,Endline 4,No Mistake,Mid wcpm
+612,Endline 4,No Mistake,High wcpm
+611,Endline 4,Substitution Minor,Mid wcpm
+362,Endline 3,Substitution Minor,Low wcpm
+113,Endline 3,Substitution Minor,High wcpm
+344,Endline 3,Substitution Minor,Mid wcpm
+352,Endline 3,Substitution Minor,Low wcpm
+341,Endline 3,No Mistake,Mid wcpm
+363,Endline 4,No Mistake,High wcpm
+377,Endline 4,Substitution Minor,Low wcpm
+419,Endline 4,Substitution Minor,Low wcpm
+609,Endline 4,Substitution Moderate,Low wcpm
+613,Endline 3,Substitution Minor,Mid wcpm
+97,Endline 3,Substitution Minor,High wcpm
+165,Endline 4,Substitution Minor,Mid wcpm
+275,Endline 4,No Mistake,Mid wcpm
+274,Endline 4,No Mistake,High wcpm
+278,Endline 4,Substitution Minor,Mid wcpm
+193,Endline 4,No Mistake,High wcpm
+220,Endline 4,Substitution Minor,Mid wcpm
+263,Endline 4,Mixed Minor,High wcpm
+242,Endline 4,No Mistake,Mid wcpm
+281,Endline 4,Deletion Moderate,Mid wcpm
+248,Endline 4,Deletion Minor,Low wcpm
+201,Endline 4,Substitution Moderate,Low wcpm
+189,Endline 4,Substitution Minor,Mid wcpm
+163,Endline 4,No Mistake,Mid wcpm
+213,Endline 3,Substitution Minor,Mid wcpm
+566,Endline 3,No Mistake,Low wcpm
+241,Endline 3,Substitution Moderate,Low wcpm
+169,Endline 3,No Mistake,Low wcpm
+220,Endline 3,Substitution Minor,Mid wcpm
+163,Endline 3,No Mistake,Mid wcpm
+263,Endline 3,Substitution Minor,High wcpm
+274,Endline 3,No Mistake,Mid wcpm
+275,Endline 3,No Mistake,Mid wcpm
+165,Endline 3,Substitution Minor,Mid wcpm
+281,Endline 3,Substitution Moderate,Low wcpm
+161,Endline 3,Deletion Minor,Mid wcpm
+183,Endline 4,No Mistake,High wcpm
+174,Endline 4,Substitution Moderate,Low wcpm
+181,Endline 4,No Mistake,High wcpm
+175,Endline 4,No Mistake,High wcpm
+173,Endline 4,No Mistake,Mid wcpm
+179,Endline 4,Substitution Minor,Mid wcpm
+176,Endline 4,Deletion Moderate,Low wcpm
+177,Endline 4,Substitution Minor,Mid wcpm
+180,Endline 4,Substitution Minor,High wcpm
+182,Endline 4,No Mistake,Mid wcpm
+172,Endline 4,Substitution Moderate,Low wcpm
+184,Endline 4,Substitution Minor,Mid wcpm
+178,Endline 4,Substitution Minor,Low wcpm
+53,Endline 4,Substitution Minor,Low wcpm
+920,Endline 4,Substitution Minor,Mid wcpm
+154,Endline 4,No Mistake,High wcpm
+157,Endline 4,Substitution Minor,Mid wcpm
+1213,Endline 4,Substitution Moderate,Low wcpm
+52,Endline 4,Substitution Moderate,Mid wcpm
+61,Endline 4,Substitution Minor,Low wcpm
+65,Endline 4,Substitution Minor,Mid wcpm
+47,Endline 4,Substitution Minor,High wcpm
+167,Endline 4,No Mistake,Mid wcpm
+91,Endline 4,Substitution Minor,High wcpm
+100,Endline 4,No Mistake,Mid wcpm
+94,Endline 4,Substitution Minor,Mid wcpm
+98,Endline 4,Substitution Minor,Mid wcpm
+102,Endline 4,Substitution Moderate,Mid wcpm
+104,Endline 4,Substitution Minor,High wcpm
+97,Endline 4,Substitution Minor,High wcpm
+1324,Baseline,Mixed Minor,High wcpm
+1157,Midline,No Mistake,High wcpm
+1316,Midline,No Mistake,High wcpm
+1333,Endline 3,No Mistake,Low wcpm
+1338,Endline 2,No Mistake,Low wcpm
+78,Endline 4,Substitution Moderate,Mid wcpm
+213,Endline 4,Substitution Minor,Mid wcpm
+244,Endline 4,Substitution Moderate,Low wcpm
+338,Endline 4,No Mistake,Mid wcpm
