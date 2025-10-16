@@ -41,15 +41,36 @@ def create_app():
 
     @app.route("/tagging", methods=["GET"])
     def tagging():
+        """
+        Endpoint to run the DataTagging pipeline and tag mistakes made by students.
+        """
         try:
             app.logger.info("Running the Tagging of the mistakes (In Progress ..)")
+
             dataTaggingVar = DataTagging()
-            dataTaggingVar.initiate_data_tagging()
+            combined_df = dataTaggingVar.initiate_data_tagging()
+
+            app.logger.info("Tagging process completed successfully.")
 
             return jsonify({
-                "status": "success"})
-        except:
-            pass
+                "status": "success",
+                "message": "Data tagging pipeline completed successfully.",
+                "output_paths": {
+                    "letter": dataTaggingVar.config.letterPath,
+                    "word": dataTaggingVar.config.wordPath,
+                    "paragraph": dataTaggingVar.config.paragraphPath,
+                    "story": dataTaggingVar.config.storyPath,
+                    "combined":dataTaggingVar.config.combinedPath
+                }
+            }), 200
+
+        except Exception as e:
+            app.logger.exception("Error while running tagging pipeline.")
+            return jsonify({
+                "status": "error",
+                "message": str(e),
+                "trace": traceback.format_exc().splitlines()[-1]
+            }), 500
 
 
     @app.route("/predict", methods=["GET"])
@@ -126,7 +147,6 @@ def create_app():
             }), 500
 
     return app
-
 
 app = create_app()
 

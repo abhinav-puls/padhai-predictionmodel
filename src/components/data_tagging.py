@@ -24,6 +24,7 @@ class DataTaggingConfig:
     wordPath: str = os.path.join('artifact', 'tags', 'word.csv')
     paragraphPath: str = os.path.join('artifact', 'tags', 'paragraph.csv')
     storyPath: str = os.path.join('artifact', 'tags', 'story.csv')
+    combinedPath: str = os.path.join('artifact', 'tags', 'combinedTagged.csv')
 
 
 class DataTagging:
@@ -68,8 +69,15 @@ class DataTagging:
 
         try:
             if engine is not None:
-                df = pd.read_sql(
-                    "SELECT id, student_id, level, question, answer,answer_check_status, no_del, no_sub, no_mistakes, no_mistakes_edited, wcpm FROM parakh_v1_testdetail WHERE section='reading'",
+                df = pd.read_sql("""
+                                SELECT td.id, td.student_id, td.level, 
+                                td.question, td.answer,td.answer_check_status, 
+                                td.no_del, td.no_sub, td.no_mistakes, 
+                                td.no_mistakes_edited, td.wcpm,
+                                t.manual_proficiency, t.test_type, t.community_id
+                                FROM parakh_v1_testdetail td LEFT JOIN parakh_v1_test t 
+                                ON td.test_id = t.id
+                                WHERE td.section='reading'""",
                     con=engine
                 )
             else:
@@ -77,7 +85,14 @@ class DataTagging:
                 conn = get_connection()
                 try:
                     df = pd.read_sql(
-                        "SELECT id, student_id, level, question, answer,answer_check_status, no_del, no_sub, no_mistakes, no_mistakes_edited, wcpm FROM parakh_v1_testdetail WHERE section='reading'",
+                        """SELECT td.id, td.student_id, td.level, 
+                                    td.question, td.answer,td.answer_check_status, 
+                                    td.no_del, td.no_sub, td.no_mistakes, 
+                                    td.no_mistakes_edited, td.wcpm,
+                                    t.manual_proficiency, t.test_type, t.community_id
+                                 FROM parakh_v1_testdetail td LEFT JOIN parakh_v1_test t 
+                                 ON td.test_id = t.id
+                                 WHERE td.section='reading'""",
                         con=conn
                     )
                 finally:
@@ -311,9 +326,6 @@ class DataTagging:
     
 
 
-
-
-
     ################# Main Entry Point #############################################
     
     def initiate_data_tagging(self):
@@ -354,6 +366,36 @@ class DataTagging:
                 logging.info(f"Story-level data saved to {self.config.storyPath}")
 
             logging.info("Data tagging pipeline completed successfully.")
+
+            # --- New: Combine them into one final DataFrame ---
+            common_cols = [
+                "id", "community_id", "student_id", "test_type", "manual_proficiency",
+                "question", "answer", "answer_check_status",
+                "no_del", "no_sub", "no_mistakes", "no_mistakes_edited", "wcpm","tags"
+            ]
+
+            # Ensure all DataFrames have these columns
+            def align_columns(df):
+                for col in common_cols:
+                    if col not in df.columns:
+                        df[col] = None
+                return df[common_cols]
+            
+
+            letter_df = align_columns(letter_tagged)
+            word_df = align_columns(word_tagged)
+            paragraph_df = align_columns(paragraph_tagged)
+            story_df = align_columns(story_tagged)
+
+            combined_df = pd.concat([letter_df, word_df, paragraph_df, story_df], ignore_index=True)
+
+            if not combined_df.empty:
+                os.makedirs(os.path.dirname(self.config.combinedPath), exist_ok=True)
+                combined_df.to_csv(self.config.combinedPath, index=False)
+                logging.info(f"Combined Tagged data saved successfully {self.config.combinedPath}")
+
+            return combined_df
+
 
         except Exception as e:
             logging.exception("Data tagging pipeline failed.")
