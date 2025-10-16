@@ -58,11 +58,7 @@ def create_app():
                 "status": "success",
                 "message": "Data tagging pipeline completed successfully.",
                 "output_paths": {
-                    "letter": dataTaggingVar.config.letterPath,
-                    "word": dataTaggingVar.config.wordPath,
-                    "paragraph": dataTaggingVar.config.paragraphPath,
-                    "story": dataTaggingVar.config.storyPath,
-                    "combined":dataTaggingVar.config.combinedPath
+                    "final_profiles": dataTaggingVar.config.finalProfiles,
                 }
             }), 200
 

@@ -14,7 +14,6 @@ from src.components.database import engine
 from fuzzywuzzy import fuzz
 
 
-
 @dataclass
 class DataTaggingConfig:
     """
@@ -25,6 +24,7 @@ class DataTaggingConfig:
     paragraphPath: str = os.path.join('artifact', 'tags', 'paragraph.csv')
     storyPath: str = os.path.join('artifact', 'tags', 'story.csv')
     combinedPath: str = os.path.join('artifact', 'tags', 'combinedTagged.csv')
+    finalProfiles: str = os.path.join('artifact', 'output', 'profiles.csv')
 
 
 class DataTagging:
@@ -58,7 +58,6 @@ class DataTagging:
 
     
     ##### Database Functions################################
-
 
     def _fetch_test_details(self) -> pd.DataFrame:
         """
@@ -462,6 +461,7 @@ class DataTagging:
                 else:
                     return f"{severity} {max_type}"
 
+            BL_pivot['Fluency Band'] = None
 
             BL_pivot['Profile'] = None
             BL_pivot['Profile'] = BL_pivot.apply(classify_student, axis = 1)
@@ -541,25 +541,74 @@ class DataTagging:
             for col in phonetic_cols[1:]:
                 LL_pivot["Phonetic issue"] += LL_pivot.get(col, 0)
 
-            
             LL_pivot["Total Mistakes"] = LL_pivot["Decoding issue"] + LL_pivot["Phonetic issue"]
-
             LL_pivot['Profile'] = None
             LL_pivot["Profile"] = LL_pivot.apply(classify_student_word, axis=1)
+            LL_pivot['Fluency Band'] = None
 
             print(f"Letter students profiles are created{LL_pivot.head(2)}")
 
 
-            # placeholder result structure
-            results = {
-                "total_rows": len(df_combined),
-                "summary": None,   
-                "by_level": None,
-                "by_group": None,
-                "examples": None
-            }
+            ############### WORD STUDENT PROFILES ########################################
+            WL['Profile'] = WL['tags']
+            
+            def wcpm_band(wcpm):
+                if wcpm< 60:
+                    return "Low wcpm"
+                elif 60<= wcpm <=100:
+                    return 'Mid wcpm'
+                else:
+                    return 'High wcpm'
+            
+            WL['Fluency Band'] = WL['wcpm'].apply(wcpm_band)
+            print(f"Word students profiles are created{WL.head(2)}")
 
-            return results
+            ############### PARA STUDENT PROFILES ########################################
+
+            PL['Profile'] = PL['tags'] 
+            PL['Fluency Band'] = PL['wcpm'].apply(wcpm_band)
+            print(f"Paragraph students profiles are created{PL.head(2)}")
+
+
+            ############### STORY STUDENT PROFILES ########################################
+            SL['Profile'] = SL['tags'] 
+            SL['Fluency Band'] = SL['wcpm'].apply(wcpm_band)
+
+            print(f"Story students profiles are created{SL.head(2)}")
+
+
+            ############### COMBINE ALL PROFILES ########################################
+            def select_final_cols(df, level_name):
+                df = df.copy()
+                cols_needed = ['student_id', 'test_type', 'Profile', 'Fluency Band']
+                for col in cols_needed:
+                    if col not in df.columns:
+                        df[col] = None
+                df['manual_proficiency'] = df.get('manual_proficiency', level_name)
+                return df[cols_needed]
+
+            BL_final = select_final_cols(BL_pivot, 'Beginner')
+            LL_final = select_final_cols(LL_pivot, 'Letter')
+            WL_final = select_final_cols(WL, 'Word')
+            PL_final = select_final_cols(PL, 'Paragraph')
+            SL_final = select_final_cols(SL, 'Story')
+
+            final_profiles_df = pd.concat([BL_final, LL_final, WL_final, PL_final, SL_final], ignore_index=True)
+            print(f"Combined profiling dataframe shape: {final_profiles_df.shape}")
+            print(final_profiles_df.head(5))
+            # final_profiles_df.to_csv('profiles.csv')
+            final_profiles_df.to_csv(self.config.finalProfiles , index = False, header = True)
+
+
+            results = {
+                    "total_rows": len(df_combined),
+                    "summary": None,   
+                    "by_level": None,
+                    "by_group": None,
+                    "examples": None}
+
+            return final_profiles_df
+
 
         except Exception as e:
             # keep exception raising consistent with project error handling

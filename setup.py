@@ -20,6 +20,7 @@ def get_requirements(file_path: str)-> List[str]:
     return requirements
 
 
+
 setup(
     name='padhai prediction model',
     version='0.0.1',
