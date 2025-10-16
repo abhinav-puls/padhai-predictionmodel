@@ -1,6 +1,6 @@
 # padhai-learning levels prediction and Mistake profiling
 
-Lightweight Flask API and pipeline to run trained prediction models, tag student mistakes, and produce simple profiling reports.
+Lightweight Flask API and pipeline to run trained prediction models, tag student mistakes, and produce simple profiling csv.
 
 This project:
 - transforms raw/source data into model-ready features (DataTransformation),
