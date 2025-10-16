@@ -36,15 +36,13 @@ class DataTagging:
         # Similarity and phonetic mappings
         self.SIMILAR_LOOKING_PAIRS = [
             ('व', 'ब'), ('ध', 'घ'), ('घ', 'ध'), ('द', 'ट'),
-            ('ध', 'छ'), ('च', 'ज'), ('म', 'भ')
-        ]
+            ('ध', 'छ'), ('च', 'ज'), ('म', 'भ')]
 
         self.PHONETIC_PAIRS = [
             ('ठ', 'ट'), ('घ', 'ग'), ('ध', 'द'), ('ग', 'घ'),
             ('ख', 'क'), ('ड', 'द'), ('ट', 'ठ'), ('ज', 'झ'),
             ('ड', 'ढ'), ('द', 'ध'), ('क', 'ख'), ('च', 'छ'),
-            ('द', 'क'), ('ब', 'भ')
-        ]
+            ('द', 'क'), ('ब', 'भ')]
 
         self.FLAG_MAP = {
             '1': "No mistake",
@@ -53,10 +51,8 @@ class DataTagging:
             '3b': "Phonetic Issue",
             '3c': "Decoding Issue",
             '4': "Decoding Issue",
-            '9': "Phonetic Issue"
-        }
+            '9': "Phonetic Issue"}
 
-    
     ##### Database Functions################################
 
     def _fetch_test_details(self) -> pd.DataFrame:
@@ -179,8 +175,7 @@ class DataTagging:
                 phonetic_set,
                 matra_pattern
             ),
-            axis=1
-        )
+            axis=1)
 
         letters_df['tags'] = letters_df['letFlag'].astype(str).map(self.FLAG_MAP).fillna('Unknown')
 
@@ -324,7 +319,6 @@ class DataTagging:
         return story_df
     
 
-
     ################# Main Entry Point #############################################
     
     def initiate_data_tagging(self):
@@ -423,8 +417,8 @@ class DataTagging:
 
             ############### BEGINNER STUDENT PROFILES ########################################
             BL = BL[(BL['answer_check_status']=='False') | (BL['answer_check_status']=='')]
-            
-            BL_pivot = BL.pivot_table(index=['test_type','student_id'], columns='tags', 
+        
+            BL_pivot = BL.pivot_table(index=['test_type','manual_proficiency','student_id'], columns='tags', 
                            values='id', aggfunc='count', fill_value=0).reset_index()
             
             required_cols = ["Decoding Issue", "Phonetic issue", "Visual Mismatch"]
@@ -509,7 +503,7 @@ class DataTagging:
             
             LL = LL[(LL['answer_check_status']=='False') | (LL['answer_check_status']=='')]
 
-            LL_pivot = LL.pivot_table(index=['test_type','student_id'], columns='tags', 
+            LL_pivot = LL.pivot_table(index=['test_type','manual_proficiency','student_id'], columns='tags', 
                            values='id', aggfunc='count', fill_value=0).reset_index()
             
             required_cols_word = ["Omission","Phonetic issue - Missing matras",
@@ -580,11 +574,10 @@ class DataTagging:
             ############### COMBINE ALL PROFILES ########################################
             def select_final_cols(df, level_name):
                 df = df.copy()
-                cols_needed = ['student_id', 'test_type', 'Profile', 'Fluency Band']
+                cols_needed = ['student_id','manual_proficiency','test_type', 'Profile', 'Fluency Band']
                 for col in cols_needed:
                     if col not in df.columns:
                         df[col] = None
-                df['manual_proficiency'] = df.get('manual_proficiency', level_name)
                 return df[cols_needed]
 
             BL_final = select_final_cols(BL_pivot, 'Beginner')
