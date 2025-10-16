@@ -48,12 +48,12 @@ class DataTagging:
 
         self.FLAG_MAP = {
             '1': "No mistake",
-            '2': "Decoding issue",
+            '2': "Decoding Issue",
             '3a': "Visual Mismatch",
-            '3b': "Phonetic issue",
+            '3b': "Phonetic Issue",
             '3c': "Decoding Issue",
             '4': "Decoding Issue",
-            '9': "Accent"
+            '9': "Phonetic Issue"
         }
 
     
@@ -369,7 +369,7 @@ class DataTagging:
 
             # --- New: Combine them into one final DataFrame ---
             common_cols = [
-                "id", "community_id", "student_id", "test_type", "manual_proficiency",
+                "id", "community_id", "student_id", "test_type","level","manual_proficiency",
                 "question", "answer", "answer_check_status",
                 "no_del", "no_sub", "no_mistakes", "no_mistakes_edited", "wcpm","tags"
             ]
@@ -396,7 +396,172 @@ class DataTagging:
 
             return combined_df
 
-
         except Exception as e:
             logging.exception("Data tagging pipeline failed.")
+            raise CustomException(e, sys)
+        
+    def data_profiling(self, df_combined: "pd.DataFrame"):
+        """
+        Accepts df_combined and returns a dict with profiling results.
+        Implement profiling logic inside the try block.
+        """
+        try:
+            # basic validation
+            if df_combined is None:
+                raise ValueError("df_combined is None")
+            if not isinstance(df_combined, pd.DataFrame):
+                df_combined = pd.DataFrame(df_combined)
+
+            print(f"The combined dataframe  {df_combined.head(2)}")
+
+            BL = df_combined[(df_combined['manual_proficiency']=='Beginner') & (df_combined['level']=='Letter')]
+            LL = df_combined[(df_combined['manual_proficiency']=='Letter') & (df_combined['level']=='Word')]
+            WL = df_combined[(df_combined['manual_proficiency']=='Word') & (df_combined['level']=='Paragraph')]
+            PL = df_combined[(df_combined['manual_proficiency']=='Paragraph') & (df_combined['level']=='Story')]
+            SL = df_combined[(df_combined['manual_proficiency']=='Story') & (df_combined['level']=='Story')]
+
+
+
+            ############### BEGINNER STUDENT PROFILES ########################################
+            BL = BL[(BL['answer_check_status']=='False') | (BL['answer_check_status']=='')]
+            
+            BL_pivot = BL.pivot_table(index=['test_type','student_id'], columns='tags', 
+                           values='id', aggfunc='count', fill_value=0).reset_index()
+            
+            required_cols = ["Decoding Issue", "Phonetic issue", "Visual Mismatch"]
+
+            for col in required_cols:
+                if col not in BL_pivot.columns:
+                    BL_pivot[col] = None
+
+            def classify_student(row):
+                # Safely get numeric values (default to 0 if missing or NaN)
+                decoding = row.get("Decoding Issue", 0) or 0
+                phonetic = row.get("Phonetic issue", 0) or 0
+                visual = row.get("Visual Mismatch", 0) or 0
+
+                # Total mistakes
+                total = decoding + phonetic + visual
+
+                # Determine severity
+                severity = "Major" if total >= 3 else "Minor"
+
+                # Determine dominant error type
+                types = {
+                    "Decoding": decoding,
+                    "Phonetic": phonetic,
+                    "Visual": visual
+                }
+
+                max_type = max(types, key=types.get)
+                max_val = types[max_type]
+
+                # If multiple categories share the same max value → Mixed
+                if list(types.values()).count(max_val) > 1:
+                    return f"{severity} Mixed"
+                else:
+                    return f"{severity} {max_type}"
+
+
+            BL_pivot['Profile'] = None
+            BL_pivot['Profile'] = BL_pivot.apply(classify_student, axis = 1)
+            print(f"Begginer students profiles are created{BL_pivot.head(2)}")
+
+
+
+            ############### LETTER STUDENT PROFILES ########################################
+            ## Static Function
+            def strip_matras(word):
+                """Remove Devanagari matras, vowel signs, and make safe for any input."""
+                try:
+                    return re.sub(r'[\u093E-\u094C\u0900-\u0903\u094D]', '', str(word)).strip()
+                except Exception:
+                    return ""
+            
+            def classify_student_word(row):
+                """
+                Classify student based on total mistakes and dominant type.
+                
+                Args:
+                    row (pd.Series): A row containing 'Total Mistakes', 'Decoding issue', and 'Phonetic issue'.
+                
+                Returns:
+                    str: Classification label like 'Major Decoding', 'Minor Phonetic', or 'Major Mixed'.
+                """
+                total = row.get("Total Mistakes", 0)
+                decoding = row.get("Decoding issue", 0)
+                phonetic = row.get("Phonetic issue", 0)
+                
+                # Determine severity
+                severity = "Major" if total >= 3 else "Minor"
+                
+                # Determine dominant type
+                if decoding > phonetic:
+                    profile_type = "Decoding"
+                elif phonetic > decoding:
+                    profile_type = "Phonetic"
+                else:
+                    profile_type = "Mixed"
+                
+                # Combine into profile label
+                return f"{severity} {profile_type}"
+
+            
+            LL = LL[(LL['answer_check_status']=='False') | (LL['answer_check_status']=='')]
+
+            LL_pivot = LL.pivot_table(index=['test_type','student_id'], columns='tags', 
+                           values='id', aggfunc='count', fill_value=0).reset_index()
+            
+            required_cols_word = ["Omission","Phonetic issue - Missing matras",
+                             "Decoding issue - Not able to identify all letters",
+                            "Decoding issue - Partial reading",
+                            "Substitution issue - Unrelated word",
+                            "Phonetic issue - Similar looking/sounding",
+                            "Correct",
+                            "Uncategorized"]
+             
+            for col in required_cols_word:
+                if col not in LL_pivot.columns:
+                    LL_pivot[col] = None
+
+            ## Aggregate the decoding issues
+            decoding_cols = ["Decoding issue - Not able to identify all letters",
+                             "Decoding issue - Partial reading",
+                             "Omission",
+                             "Substitution issue - Unrelated word"]
+            
+            LL_pivot["Decoding issue"] = LL_pivot.get(decoding_cols[0], 0)
+            for col in decoding_cols[1:]:
+                LL_pivot["Decoding issue"] += LL_pivot.get(col, 0)
+
+            # Aggregate Phonetic issue
+            phonetic_cols = ["Phonetic issue - Missing matras","Phonetic issue - Similar looking/sounding"]
+
+            LL_pivot["Phonetic issue"] = LL_pivot.get(phonetic_cols[0], 0)
+            for col in phonetic_cols[1:]:
+                LL_pivot["Phonetic issue"] += LL_pivot.get(col, 0)
+
+            
+            LL_pivot["Total Mistakes"] = LL_pivot["Decoding issue"] + LL_pivot["Phonetic issue"]
+
+            LL_pivot['Profile'] = None
+            LL_pivot["Profile"] = LL_pivot.apply(classify_student_word, axis=1)
+
+            print(f"Letter students profiles are created{LL_pivot.head(2)}")
+
+
+            # placeholder result structure
+            results = {
+                "total_rows": len(df_combined),
+                "summary": None,   
+                "by_level": None,
+                "by_group": None,
+                "examples": None
+            }
+
+            return results
+
+        except Exception as e:
+            # keep exception raising consistent with project error handling
+            logging.exception("dataprofiling failed: %s", e)
             raise CustomException(e, sys)

@@ -49,8 +49,10 @@ def create_app():
 
             dataTaggingVar = DataTagging()
             combined_df = dataTaggingVar.initiate_data_tagging()
-
             app.logger.info("Tagging process completed successfully.")
+
+            dataProfiling = dataTaggingVar.data_profiling(combined_df)
+            app.logger.info("Profiling process completed successfully.")
 
             return jsonify({
                 "status": "success",
