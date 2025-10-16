@@ -85,6 +85,10 @@ curl http://127.0.0.1:5002/predict
 ```
 
 4. Tagging & profiling (programmatic usage)
+```bash
+curl http://127.0.0.1:5002/tagging
+# check artifact output for the profiles.csv
+```
 - If you want to run tagging or profiling directly from Python (no dedicated endpoint), use snippets:
 
 Tagging (letter-level):
