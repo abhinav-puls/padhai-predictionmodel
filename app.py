@@ -147,7 +147,7 @@ def create_app():
 
 
     @app.route("/classprofiles", methods=["GET"])
-    def profiles():
+    def classprofiles():
         """
         Compute class/community profiles for all phases.
         This endpoint runs the prediction pipeline (in-process) to obtain predicted dataframe,
