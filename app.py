@@ -11,6 +11,7 @@ import datetime
 from src.components.data_prediction import PredictPipeline
 from src.components.data_transformation import DataTransformation
 from src.components.data_tagging import DataTagging
+from src.components.class_profiles import compute_class_profiles
 from flask_cors import CORS
 
 
@@ -138,6 +139,58 @@ def create_app():
             })
         except Exception as e:
             app.logger.exception("Unhandled error in /predict")
+            return jsonify({
+                "status": "error",
+                "message": str(e),
+                "trace": traceback.format_exc().splitlines()[-1]
+            }), 500
+
+
+    @app.route("/classprofiles", methods=["GET"])
+    def profiles():
+        """
+        Compute class/community profiles for all phases.
+        This endpoint runs the prediction pipeline (in-process) to obtain predicted dataframe,
+        then computes and saves class profiles and returns the CSV path and summary counts.
+        """
+        try:
+            app.logger.info("Running prediction to obtain data for class profiling")
+            pipeline = PredictPipeline()
+            # attempt to load existing artifact first
+            pred_df = None
+            if os.path.exists(os.path.join(OUTPUT_DIR, "predictions.csv")):
+                try:
+                    pred_df = pd.read_csv(os.path.join(OUTPUT_DIR, "predictions.csv"))
+                    app.logger.info("Loaded existing predictions from artifact/output/predictions.csv")
+                except Exception:
+                    app.logger.exception("Failed to load existing predictions file; will call pipeline.predict")
+
+            if pred_df is None:
+                # run full transformation + prediction
+                dt = DataTransformation()
+                res = dt.initiate_data_transformation()
+                if isinstance(res, tuple) and len(res) >= 5 and isinstance(res[4], pd.DataFrame):
+                    test_df = res[4]
+                elif isinstance(res, pd.DataFrame):
+                    test_df = res
+                elif isinstance(res, str) and os.path.exists(res):
+                    test_df = pd.read_csv(res)
+                else:
+                    if os.path.exists(TEST_DATA_PATH):
+                        test_df = pd.read_csv(TEST_DATA_PATH)
+                    else:
+                        return jsonify({"status": "error", "message": "No test data available for profiling"}), 400
+
+                pred_df = pipeline.predict(test_df)
+
+            profiles_df, out_path = compute_class_profiles(pred_df)
+            return jsonify({
+                "status": "success",
+                "rows": len(pred_df),
+                "profiles_path": out_path
+            }), 200
+        except Exception as e:
+            app.logger.exception("Error while computing class profiles")
             return jsonify({
                 "status": "error",
                 "message": str(e),

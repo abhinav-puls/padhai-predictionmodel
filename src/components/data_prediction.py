@@ -14,6 +14,7 @@ class PredictPipeline:
     def predict(self, data_transformed):
         logging.info("PredictPipeline.predict started")
         try:
+
             # basic input validation / coercion
             if data_transformed is None:
                 logging.error("Prediction input is None")
@@ -92,6 +93,8 @@ class PredictPipeline:
             X['el_lang_confidence'] = np.array(lang_pred_confidence).ravel()
             X['el_maths_confidence'] = np.array(maths_pred_confidence).ravel()
             print(f"the shape of X dataframe is shape:{X.shape} and {X['Phase'].unique()}")
+            print(f"The X dataframe has the following entries:{X.columns}")
+
             Phase1_df = X[X['Phase']==1][['community_id','student_id','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
             Phase2_df = X[X['Phase']==2][['community_id','student_id','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
             Phase3_df = X[X['Phase']==3][['community_id','student_id','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
