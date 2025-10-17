@@ -58,17 +58,56 @@ def create_app():
 
             dataProfiling = dataTaggingVar.data_profiling(combined_df)
             app.logger.info("Profiling process completed successfully.")
+            print("data profiling", dataProfiling)
+
+            # Check if the engine instance is created
+            if engine is None:
+                app.logger.error("Database engine not initialized")
+                return jsonify({'status':'error', 'message':'Database connection not available'}), 500
+
+            profile_records = dataProfiling.to_dict(orient="records")
+
+            with engine.begin() as conn:
+                for row in profile_records:
+                    row["created_at"] = datetime.utcnow()
+
+                    # Update existing row first
+                    update_sql = """
+                    UPDATE parakh_v1_mistake_profiles
+                    SET
+                        manual_proficiency = :manual_proficiency,
+                        profile = :profile,
+                        fluency_band = :fluency_band,
+                        created_at = :created_at
+                    WHERE community_id = :community_id AND student_id = :student_id AND test_type = :test_type
+                    """
+                    result = conn.execute(text(update_sql), row)
+
+                    # If no row was updated, insert new row
+                    if result.rowcount == 0:
+                        insert_sql = """
+                        INSERT INTO parakh_v1_mistake_profiles (
+                            community_id, student_id,
+                            manual_proficiency, test_type, profile, fluency_band, created_at
+                        ) VALUES (
+                            :community_id, :student_id,
+                            :manual_proficiency, :test_type, :profile, :fluency_band, :created_at
+                        )
+                        """
+                        conn.execute(text(insert_sql), row)
+
+            app.logger.info("Mistake profiles successfully inserted/updated in database")
 
             return jsonify({
                 "status": "success",
-                "message": "Data tagging pipeline completed successfully.",
+                "message": "Data update and insertion is successful",
                 "output_paths": {
                     "final_profiles": dataTaggingVar.config.finalProfiles,
                 }
             }), 200
 
         except Exception as e:
-            app.logger.exception("Error while running tagging pipeline.")
+            app.logger.exception("Error while running tagging/ data insertion pipeline.")
             return jsonify({
                 "status": "error",
                 "message": str(e),

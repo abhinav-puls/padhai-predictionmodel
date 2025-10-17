@@ -455,10 +455,10 @@ class DataTagging:
                 else:
                     return f"{severity} {max_type}"
 
-            BL_pivot['Fluency Band'] = None
+            BL_pivot['fluency_band'] = None
 
-            BL_pivot['Profile'] = None
-            BL_pivot['Profile'] = BL_pivot.apply(classify_student, axis = 1)
+            BL_pivot['profile'] = None
+            BL_pivot['profile'] = BL_pivot.apply(classify_student, axis = 1)
             print(f"Begginer students profiles are created{BL_pivot.head(2)}")
 
 
@@ -536,15 +536,15 @@ class DataTagging:
                 LL_pivot["Phonetic issue"] += LL_pivot.get(col, 0)
 
             LL_pivot["Total Mistakes"] = LL_pivot["Decoding issue"] + LL_pivot["Phonetic issue"]
-            LL_pivot['Profile'] = None
-            LL_pivot["Profile"] = LL_pivot.apply(classify_student_word, axis=1)
-            LL_pivot['Fluency Band'] = None
+            LL_pivot['profile'] = None
+            LL_pivot["profile"] = LL_pivot.apply(classify_student_word, axis=1)
+            LL_pivot['fluency_band'] = None
 
             print(f"Letter students profiles are created{LL_pivot.head(2)}")
 
 
             ############### WORD STUDENT PROFILES ########################################
-            WL['Profile'] = WL['tags']
+            WL['profile'] = WL['tags']
             
             def wcpm_band(wcpm):
                 if wcpm< 60:
@@ -554,19 +554,19 @@ class DataTagging:
                 else:
                     return 'High wcpm'
             
-            WL['Fluency Band'] = WL['wcpm'].apply(wcpm_band)
+            WL['fluency_band'] = WL['wcpm'].apply(wcpm_band)
             print(f"Word students profiles are created{WL.head(2)}")
 
             ############### PARA STUDENT PROFILES ########################################
 
-            PL['Profile'] = PL['tags'] 
-            PL['Fluency Band'] = PL['wcpm'].apply(wcpm_band)
+            PL['profile'] = PL['tags'] 
+            PL['fluency_band'] = PL['wcpm'].apply(wcpm_band)
             print(f"Paragraph students profiles are created{PL.head(2)}")
 
 
             ############### STORY STUDENT PROFILES ########################################
-            SL['Profile'] = SL['tags'] 
-            SL['Fluency Band'] = SL['wcpm'].apply(wcpm_band)
+            SL['profile'] = SL['tags'] 
+            SL['fluency_band'] = SL['wcpm'].apply(wcpm_band)
 
             print(f"Story students profiles are created{SL.head(2)}")
 
@@ -574,10 +574,10 @@ class DataTagging:
             ############### COMBINE ALL PROFILES ########################################
             def select_final_cols(df, level_name):
                 df = df.copy()
-                cols_needed = ['community_id','student_id','manual_proficiency','test_type', 'Profile', 'Fluency Band']
+                cols_needed = ['community_id','student_id','manual_proficiency','test_type', 'profile', 'fluency_band']
                 for col in cols_needed:
                     if col not in df.columns:
-                        df[col] = None
+                        df[col] = ''
                 return df[cols_needed]
 
             BL_final = select_final_cols(BL_pivot, 'Beginner')
