@@ -286,8 +286,78 @@ def create_app():
                 pred_df = pipeline.predict(test_df)
 
             profiles_df, out_path = compute_class_profiles(pred_df)
+
+            """
+            Insert/update class profiles into parakh_v1_class_profiles table.
+            """
+            if engine is None:
+                raise RuntimeError("Database engine not initialized")
+
+            # fill missing labels with defaults
+            profiles_df["cluster_bl_label"] = profiles_df["cluster_bl_label"].fillna("Unknown")
+            profiles_df["cluster_el1_label"] = profiles_df["cluster_el1_label"].fillna("Unknown")
+            profiles_df["cluster_el2_label"] = profiles_df["cluster_el2_label"].fillna("Unknown")
+            profiles_df["cluster_el3_label"] = profiles_df["cluster_el3_label"].fillna("Unknown")
+
+            insert_sql = """
+            INSERT INTO parakh_v1_class_profiles (
+                community_id,
+                cluster_bl, cluster_bl_label,
+                cluster_el1, cluster_el1_label,
+                cluster_el2, cluster_el2_label,
+                cluster_el3, cluster_el3_label,
+                created_at
+            )
+            VALUES (
+                :community_id,
+                :cluster_bl, :cluster_bl_label,
+                :cluster_el1, :cluster_el1_label,
+                :cluster_el2, :cluster_el2_label,
+                :cluster_el3, :cluster_el3_label,
+                :created_at
+            )
+            """
+
+            records = profiles_df.to_dict(orient="records")
+            for row in records:
+                row["created_at"] = datetime.utcnow()
+
+            # execute in one transaction
+            with engine.begin() as conn:
+                for row in records:
+                    # check if row exists
+                    exists = conn.execute(
+                        text("SELECT 1 FROM parakh_v1_class_profiles WHERE community_id = :community_id"),
+                        {"community_id": row["community_id"]}
+                    ).fetchone()
+
+                    if exists:
+                        # update existing
+                        conn.execute(
+                            text("""
+                            UPDATE parakh_v1_class_profiles
+                            SET
+                                cluster_bl = :cluster_bl,
+                                cluster_bl_label = :cluster_bl_label,
+                                cluster_el1 = :cluster_el1,
+                                cluster_el1_label = :cluster_el1_label,
+                                cluster_el2 = :cluster_el2,
+                                cluster_el2_label = :cluster_el2_label,
+                                cluster_el3 = :cluster_el3,
+                                cluster_el3_label = :cluster_el3_label,
+                                created_at = :created_at
+                            WHERE community_id = :community_id
+                            """),
+                            row
+                        )
+                    else:
+                        # insert new
+                        conn.execute(text(insert_sql), row)
+
+
             return jsonify({
                 "status": "success",
+                "message":'successfully updated and inserted class profiles',
                 "rows": len(pred_df),
                 "profiles_path": out_path
             }), 200
