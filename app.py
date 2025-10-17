@@ -7,12 +7,17 @@ import traceback
 import subprocess
 import sys
 import os
-import datetime
+from datetime import datetime
 from src.components.data_prediction import PredictPipeline
 from src.components.data_transformation import DataTransformation
 from src.components.data_tagging import DataTagging
+from src.components.database import engine
 from src.components.class_profiles import compute_class_profiles
+from sqlalchemy import text
+
 from flask_cors import CORS
+from datetime import datetime
+
 
 
 # path to the test dataset produced by your data transformation step
@@ -131,11 +136,70 @@ def create_app():
             pred_df.to_csv(output_path, index=False)
             app.logger.info("Saved predictions to %s", output_path)
 
+
+            if engine is None:
+                app.logger.error("Database engine not initialized")
+                return jsonify({'status':'error', 'message':'Database connection not availabel'}), 500
+            
+            records = pred_df.to_dict(orient="records")
+
+            with engine.begin() as conn:
+                for row in records:
+                    row["created_at"] = datetime.utcnow()
+
+                    # Try to update existing record first
+                    update_sql = """
+                    UPDATE parakh_v1_predictions
+                    SET
+                        bl_language = :bl_language,
+                        bl_mathematics = :bl_mathematics,
+                        el1_prediction_lang = :el1_prediction_lang,
+                        el1_prediction_maths = :el1_prediction_maths,
+                        el1_lang_confidence = :el1_lang_confidence,
+                        el1_maths_confidence = :el1_maths_confidence,
+                        el2_prediction_lang = :el2_prediction_lang,
+                        el2_prediction_maths = :el2_prediction_maths,
+                        el2_lang_confidence = :el2_lang_confidence,
+                        el2_maths_confidence = :el2_maths_confidence,
+                        el3_prediction_lang = :el3_prediction_lang,
+                        el3_prediction_maths = :el3_prediction_maths,
+                        el3_lang_confidence = :el3_lang_confidence,
+                        el3_maths_confidence = :el3_maths_confidence,
+                        created_at = :created_at
+                    WHERE community_id = :community_id AND student_id = :student_id
+                    """
+                    result = conn.execute(text(update_sql), row)
+
+                    # If no row was updated, insert a new one
+                    if result.rowcount == 0:
+                        insert_sql = """
+                        INSERT INTO parakh_v1_predictions (
+                            community_id, student_id,
+                            bl_language, bl_mathematics,
+                            el1_prediction_lang, el1_prediction_maths, el1_lang_confidence, el1_maths_confidence,
+                            el2_prediction_lang, el2_prediction_maths, el2_lang_confidence, el2_maths_confidence,
+                            el3_prediction_lang, el3_prediction_maths, el3_lang_confidence, el3_maths_confidence,
+                            created_at
+                        ) VALUES (
+                            :community_id, :student_id,
+                            :bl_language, :bl_mathematics,
+                            :el1_prediction_lang, :el1_prediction_maths, :el1_lang_confidence, :el1_maths_confidence,
+                            :el2_prediction_lang, :el2_prediction_maths, :el2_lang_confidence, :el2_maths_confidence,
+                            :el3_prediction_lang, :el3_prediction_maths, :el3_lang_confidence, :el3_maths_confidence,
+                            :created_at
+                        )
+                        """
+                        conn.execute(text(insert_sql), row)
+  
+            app.logger.info("Predictions successfully inserted/updated in database")
+
+
             return jsonify({
                 "status": "success",
                 "rows": len(pred_df),
-                "output_path": output_path
-            })
+                "message": "Predictions successfully inserted/ updated in the db"
+            }), 200
+    
         except Exception as e:
             app.logger.exception("Unhandled error in /predict")
             return jsonify({
