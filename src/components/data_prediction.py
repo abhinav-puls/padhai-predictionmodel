@@ -95,7 +95,7 @@ class PredictPipeline:
             print(f"the shape of X dataframe is shape:{X.shape} and {X['Phase'].unique()}")
             print(f"The X dataframe has the following entries:{X.columns}")
 
-            Phase1_df = X[X['Phase']==1][['community_id','student_id','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
+            Phase1_df = X[X['Phase']==1][['community_id','student_id','bl_language','bl_mathematics','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
             Phase2_df = X[X['Phase']==2][['community_id','student_id','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
             Phase3_df = X[X['Phase']==3][['community_id','student_id','el_prediction_lang','el_prediction_maths','el_lang_confidence','el_maths_confidence']]
 
@@ -115,8 +115,8 @@ class PredictPipeline:
                                         'el_maths_confidence':'el3_maths_confidence'})
             
             print(Ph1_df.student_id.nunique(),Ph2_df.student_id.nunique(),Ph3_df.student_id.nunique())
-            mrg1 = pd.merge(Ph1_df,Ph2_df,on='student_id',how='left')
-            final_merged = pd.merge(mrg1, Ph3_df, on='student_id', how='left')
+            mrg1 = pd.merge(Ph1_df,Ph2_df,on=['community_id','student_id'],how='left')
+            final_merged = pd.merge(mrg1, Ph3_df, on=['community_id','student_id'], how='left')
             final_merged = final_merged.drop_duplicates(subset=['student_id'])
             print(X.head())
             logging.info("Attached prediction columns to DataFrame; returning DataFrame with shape %s", final_merged.shape)

@@ -418,7 +418,7 @@ class DataTagging:
             ############### BEGINNER STUDENT PROFILES ########################################
             BL = BL[(BL['answer_check_status']=='False') | (BL['answer_check_status']=='')]
         
-            BL_pivot = BL.pivot_table(index=['test_type','manual_proficiency','student_id'], columns='tags', 
+            BL_pivot = BL.pivot_table(index=['community_id','test_type','manual_proficiency','student_id'], columns='tags', 
                            values='id', aggfunc='count', fill_value=0).reset_index()
             
             required_cols = ["Decoding Issue", "Phonetic issue", "Visual Mismatch"]
@@ -503,7 +503,7 @@ class DataTagging:
             
             LL = LL[(LL['answer_check_status']=='False') | (LL['answer_check_status']=='')]
 
-            LL_pivot = LL.pivot_table(index=['test_type','manual_proficiency','student_id'], columns='tags', 
+            LL_pivot = LL.pivot_table(index=['community_id','test_type','manual_proficiency','student_id'], columns='tags', 
                            values='id', aggfunc='count', fill_value=0).reset_index()
             
             required_cols_word = ["Omission","Phonetic issue - Missing matras",
@@ -574,7 +574,7 @@ class DataTagging:
             ############### COMBINE ALL PROFILES ########################################
             def select_final_cols(df, level_name):
                 df = df.copy()
-                cols_needed = ['student_id','manual_proficiency','test_type', 'Profile', 'Fluency Band']
+                cols_needed = ['community_id','student_id','manual_proficiency','test_type', 'Profile', 'Fluency Band']
                 for col in cols_needed:
                     if col not in df.columns:
                         df[col] = None

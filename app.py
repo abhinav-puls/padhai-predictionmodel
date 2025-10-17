@@ -15,7 +15,6 @@ from src.components.class_profiles import compute_class_profiles
 from flask_cors import CORS
 
 
-
 # path to the test dataset produced by your data transformation step
 TEST_DATA_PATH = os.path.join("artifact", "test.csv")
 OUTPUT_DIR = os.path.join("artifact", "output")
