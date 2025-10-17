@@ -126,7 +126,7 @@ def create_app():
 
             # save output CSV
             os.makedirs(OUTPUT_DIR, exist_ok=True)
-            filename = f"predictions_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+            filename = f"predictions.csv"
             output_path = os.path.join(OUTPUT_DIR, filename)
             pred_df.to_csv(output_path, index=False)
             app.logger.info("Saved predictions to %s", output_path)
