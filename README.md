@@ -28,6 +28,8 @@ This project:
 3. Profiling
 - `dataprofiling(df_combined)` (in `src/components/data_tagging.py`) accepts a combined DataFrame and returns tag distributions, breakdowns by level and optional wcpm bands, plus CSV exports to `artifact/output/`.
 
+4. Class Profiles
+`/classprofiles endpoint created for this`
 ---
 
 ## Setup & prerequisites
