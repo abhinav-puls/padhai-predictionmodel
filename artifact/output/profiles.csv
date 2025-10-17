@@ -1,4 +1,4 @@
-community_id,student_id,manual_proficiency,test_type,Profile,Fluency Band
+community_id,student_id,manual_proficiency,test_type,profile,fluency_band
 178,107,Beginner,Endline 1,Major Decoding,
 180,609,Beginner,Baseline,Minor Decoding,
 180,610,Beginner,Baseline,Minor Decoding,
