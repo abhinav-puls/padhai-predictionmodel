@@ -7,22 +7,51 @@ import traceback
 import subprocess
 import sys
 import os
+import shutil
 from datetime import datetime
+
+
+# ---Run immediately before the app initializes--
+def clean_artifact_csvs():
+    target_paths = [
+        "artifact",
+        "artifact/output",
+        "artifact/tags"
+    ]
+
+    for path in target_paths:
+        if os.path.exists(path):
+            for file in os.listdir(path):
+                file_path = os.path.join(path, file)
+                if os.path.isfile(file_path) and file_path.endswith(".csv"):
+                    try:
+                        os.remove(file_path)
+                        print(f"Deleted CSV file: {file_path}")
+                    except Exception as e:
+                        print(f"Could not delete {file_path}: {e}")
+        else:
+            print(f"Path does not exist, skipping: {path}")
+
+clean_artifact_csvs()
+
+
 from src.components.data_prediction import PredictPipeline
 from src.components.data_transformation import DataTransformation
 from src.components.data_tagging import DataTagging
 from src.components.database import engine
 from src.components.class_profiles import compute_class_profiles
 from sqlalchemy import text
-
 from flask_cors import CORS
-from datetime import datetime
 
 
 
 # path to the test dataset produced by your data transformation step
 TEST_DATA_PATH = os.path.join("artifact", "test.csv")
 OUTPUT_DIR = os.path.join("artifact", "output")
+
+
+
+
 
 
 def create_app():
