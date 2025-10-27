@@ -23,7 +23,7 @@ def get_requirements(file_path: str)-> List[str]:
 
 setup(
     name='padhai prediction model',
-    version='0.0.1',
+    version='1.0.1',
     author='Abhinav',
     author_email='abhinav.sonone@puls.org.in',
     packages=find_packages(),

@@ -18,7 +18,7 @@ markupsafe==3.0.3
 matplotlib==3.10.7
 numpy==2.2.6
 packaging==25.0
-# -e file:///Users/abhinavsonone/Desktop/project-padhai/padhai-predictionmodel
+# -e .
 pandas==2.3.3
 pillow==11.3.0
 psycopg2-binary==2.9.11
@@ -31,6 +31,7 @@ rapidfuzz==3.14.1
 scikit-learn==1.7.2
 scipy==1.15.3
 seaborn==0.13.2
+setuptools==80.9.0
 six==1.17.0
 sqlalchemy==2.0.43
 threadpoolctl==3.6.0

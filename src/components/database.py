@@ -34,7 +34,7 @@ if DB_URI:
         engine = create_engine(DB_URI)
         logging.info("Created SQLAlchemy engine")
     except Exception as e:
-        logging.exception("Failed to create SQLAlchemy engine for %s", DB_URI)
+        logging.exception("Failed to create SQLAlchemy engine",)
         engine = None
 else:
     logging.warning("DB_URI not configured; engine not created")
