@@ -10,6 +10,13 @@ This project:
 
 ---
 
+## run the requests in following seq
+
+`curl http://127.0.0.1:5001/predict`
+`curl http://127.0.0.1:5001/tagging`
+`curl http://127.0.0.1:5001/classprofiles`
+
+
 ## Key functionality
 
 1. Prediction
