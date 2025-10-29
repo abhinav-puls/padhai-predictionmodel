@@ -78,24 +78,24 @@ python3 src/components/data_transformation.py
 2. Start the Flask app
 ```bash
 python3 app.py
-# default host/port come from .env or fallback to 0.0.0.0:5002
+# default host/port come from .env or fallback to 0.0.0.0:5001
 ```
 
 3. API usage
 - Health check:
 ```bash
-curl http://127.0.0.1:5002/health
+curl http://127.0.0.1:5001/health
 ```
 
 - Predict (runs transformation in-process, then prediction):
 ```bash
-curl http://127.0.0.1:5002/predict
+curl http://127.0.0.1:5001/predict
 # JSON contains lang/math predictions and "output_path" for saved CSV
 ```
 
 4. Tagging & profiling (programmatic usage)
 ```bash
-curl http://127.0.0.1:5002/tagging
+curl http://127.0.0.1:5001/tagging
 # check artifact output for the profiles.csv
 ```
 - If you want to run tagging or profiling directly from Python (no dedicated endpoint), use snippets:
@@ -149,8 +149,8 @@ results = dt.dataprofiling(df)
 
 - Port in use:
   ```
-  lsof -i :5002
-  lsof -t -i :5002 | xargs -r kill
+  lsof -i :5001
+  lsof -t -i :5001 | xargs -r kill
   ```
 
 ---
