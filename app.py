@@ -49,11 +49,6 @@ from flask_cors import CORS
 TEST_DATA_PATH = os.path.join("artifact", "test.csv")
 OUTPUT_DIR = os.path.join("artifact", "output")
 
-
-
-
-
-
 def create_app():
     parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 
@@ -403,7 +398,7 @@ def create_app():
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5001)
+    app.run(debug=False, host="0.0.0.0", port=5001)
 
 
 
