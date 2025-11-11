@@ -1,16 +1,15 @@
 # Padhai Learning – Level Prediction and Mistake Profiling
 
-This project provides a lightweight Flask API and data pipeline for predicting student learning levels, tagging mistakes, and generating profiling reports.
+This project provides a lightweight Flask API and data pipeline for predicting student learning levels, tagging mistakes, and generating profiles.
 
 ---
 
 ## Overview
 
-Padhai Learning enables automated student response analytics through:
 
 - Transformation of raw/source data into model-ready features (`DataTransformation`).
 - Prediction of **Language** and **Maths** levels with trained models (`PredictPipeline`).
-- Tagging of **letter-level mistakes** and generation of individual/class profiling summaries (`DataTagging`, `dataprofiling`).
+- Tagging of **mistakes** and generation of individual/class profiling summaries (`DataTagging`, `dataprofiling`).
 - A Flask-powered API (`app.py`) orchestrating end-to-end data flow: transformation → prediction → tagging → profiling.
 
 ---
