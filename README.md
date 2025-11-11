@@ -1,165 +1,180 @@
-# padhai-learning levels prediction and Mistake profiling
+# Padhai Learning – Level Prediction and Mistake Profiling
 
-Lightweight Flask API and pipeline to run trained prediction models, tag student mistakes, and produce simple profiling csv.
-
-This project:
-- transforms raw/source data into model-ready features (DataTransformation),
-- runs two models (language & maths) to produce predictions and confidences (PredictPipeline),
-- tags letter-level mistakes (DataTagging) and produces profiling summaries (dataprofiling),
-- exposes a minimal Flask API (app.py) to run the transformation → prediction flow and save results.
+This project provides a lightweight Flask API and data pipeline for predicting student learning levels, tagging mistakes, and generating profiling reports.
 
 ---
 
-## run the requests in following seq
+## Overview
 
-`curl http://127.0.0.1:5001/predict`
-`curl http://127.0.0.1:5001/tagging`
-`curl http://127.0.0.1:5001/classprofiles`
+Padhai Learning enables automated student response analytics through:
 
+- Transformation of raw/source data into model-ready features (`DataTransformation`).
+- Prediction of **Language** and **Maths** levels with trained models (`PredictPipeline`).
+- Tagging of **letter-level mistakes** and generation of individual/class profiling summaries (`DataTagging`, `dataprofiling`).
+- A Flask-powered API (`app.py`) orchestrating end-to-end data flow: transformation → prediction → tagging → profiling.
 
-## Key functionality
-
-1. Prediction
-- Reads transformed test data (artifact/test.csv) produced by the transformation step.
-- Loads pre-trained models (`artifact/xgb_lang.pkl`, `artifact/xgb_maths.pkl`) and runs predictions.
-- Appends prediction columns to the DataFrame:
-  - `el_prediction_lang`, `el_prediction_maths`
-  - `el_lang_confidence`, `el_maths_confidence` (if model supports `predict_proba`)
-- Saves prediction CSV to `artifact/output/` with a timestamp and returns an API JSON payload including `output_path`.
-
-2. Tagging
-- Tagging compares canonical vs transcribed answers and assigns flags (visual/phonetic/decoding/etc).
-- Tagging is implemented in `src/components/data_tagging.py` (functions: `tag_letter_level`, `DataTagging.initiate_data_tagging`).
-- Tagged output (rows with `letFlag` and `tags`) is saved under `artifact/output/`.
-
-3. Profiling
-- `dataprofiling(df_combined)` (in `src/components/data_tagging.py`) accepts a combined DataFrame and returns tag distributions, breakdowns by level and optional wcpm bands, plus CSV exports to `artifact/output/`.
-
-4. Class Profiles
-`/classprofiles endpoint created for this`
 ---
 
-## Setup & prerequisites
+## Setup
 
-1. Python & virtual environment (macOS)
+### 1. Create and Activate a Virtual Environment
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
-# for DB driver (development)
-pip install psycopg2-binary
+pip install psycopg2-binary # for local PostgreSQL use
 ```
 
-2. Required artifacts / files
-- Create a `.env` file in the project root (see below). The DB credentials must be present before running DataTransformation, because the transformer reads from the DB.
-- Place trained model files in `artifact/`:
-  - `artifact/xgb_lang.pkl`
-  - `artifact/xgb_maths.pkl`
+### 2. Required Files and Directories
 
-3. .env file is needed to run this code
-# or a single SQLAlchemy URL:
+- **Model files**: Place trained model `.pkl` files in `artifact/`:
 
 ```
-- Do NOT commit `.env` to VCS. Add it to `.gitignore`.
+artifact/xgb_lang.pkl
+artifact/xgb_maths.pkl
+```
+
+- **Environment file**: Create a `.env` file in the project root for DB credentials or a SQLAlchemy URL:
+
+```
+DATABASE_URL=postgresql://username:password@host:port/dbname
+```
+
+> _Do not commit `.env` to version control. Add to `.gitignore`._
 
 ---
 
-## Running
+## Important: Update Table Names Before Running
 
-#### Check the flask port when running the below commands
+Review and update all SQL queries to match your local database schema.
 
-1. Optional: run data transformation manually to inspect errors
+- **Where to check**:
+  - `src/components/data_transformation.py`
+  - Other components/scripts interacting with your DB
+
+- **Example** (update as needed):
+
+```
+SELECT * FROM student_responses; -- Replace 'student_responses' with your actual table name
+```
+
+---
+
+## Running the Application
+
+### (Optional) Run Data Transformation Manually
+
 ```bash
 python3 src/components/data_transformation.py
-# This should create artifact/test.csv (or return a DataFrame when called programmatically)
 ```
 
-2. Start the Flask app
+_(Generates `artifact/test.csv` for model input.)_
+
+### Start the Flask API
+
 ```bash
 python3 app.py
-# default host/port come from .env or fallback to 0.0.0.0:5001
 ```
 
-3. API usage
-- Health check:
-```bash
-curl http://127.0.0.1:5001/health
-```
+By default, the API serves at `0.0.0.0:5001` (as configured in `.env`).
 
-- Predict (runs transformation in-process, then prediction):
+---
+
+## API Endpoints
+
+Run endpoints in sequence:
+
 ```bash
 curl http://127.0.0.1:5001/predict
-# JSON contains lang/math predictions and "output_path" for saved CSV
-```
-
-4. Tagging & profiling (programmatic usage)
-```bash
 curl http://127.0.0.1:5001/tagging
-# check artifact output for the profiles.csv
+curl http://127.0.0.1:5001/classprofiles
 ```
-- If you want to run tagging or profiling directly from Python (no dedicated endpoint), use snippets:
 
-Tagging (letter-level):
+### `/predict`
+
+- Runs data transformation and model prediction
+- Generates:
+  - `el_prediction_lang`, `el_prediction_maths`
+  - `el_lang_confidence`, `el_maths_confidence`
+- Saves outputs to `artifact/output/` (timestamped CSV)
+
+### `/tagging`
+
+- Compares canonical/transcribed answers
+- Flags letter-level mistakes (visual, phonetic, decoding, etc.)
+- Saves output to `artifact/output/`
+
+### `/classprofiles`
+
+- Generates summaries and tag distributions (by level and word count)
+
+---
+
+## Programmatic Usage
+
+**Tagging:**
+
 ```python
 from src.components.data_tagging import DataTagging
+
 dt = DataTagging()
-letters_tagged = dt.initiate_data_tagging()   # loads artifact/test.csv if not passed a df
+tagged_df = dt.initiate_data_tagging()
 ```
 
-Profiling:
+**Profiling:**
+
 ```python
-from src.components.data_tagging import DataTagging
-dt = DataTagging()
-df = ...  # df_combined with tags/letFlag
-results = dt.dataprofiling(df)
-# results contains summary DataFrames and CSVs under artifact/output/ by default
+results = dt.dataprofiling(tagged_df)
 ```
 
----
-
-## Output locations
-- Transformed test data: `artifact/test.csv`
-- Models: `artifact/xgb_lang.pkl`, `artifact/xgb_maths.pkl`
-- Prediction outputs & tagging/profiling CSVs: `artifact/output/` (timestamped filenames)
+Outputs automatically saved in `artifact/output/`.
 
 ---
 
-## Troubleshooting (common issues)
+## Output Structure
 
-- Missing DB credentials / connection errors:
-  - Ensure `.env` is present with DB_* variables or `DATABASE_URL`.
-  - Verify Postgres is reachable and credentials are correct.
-
-- psycopg2 build error:
-  - For development install `psycopg2-binary`:
-    ```
-    pip install psycopg2-binary
-    ```
-  - For production build, install `libpq` via Homebrew and add `pg_config` to PATH.
-
-- Missing model files:
-  - Place the model `.pkl` files into the `artifact/` directory.
-
-- KeyError for expected columns:
-  - Inspect `artifact/test.csv` columns and ensure the transformer produces the expected feature names.
-
-- Prediction length mismatch:
-  - Models must receive the exact feature subsets they were trained on. If you see "length mismatch", check X shapes logged by PredictPipeline and the models' output shapes.
-
-- Port in use:
-  ```
-  lsof -i :5001
-  lsof -t -i :5001 | xargs -r kill
-  ```
+| Type                                | Location                                                       |
+|-------------------------------------|----------------------------------------------------------------|
+| Transformed data                    | artifact/test.csv                                              |
+| Model files                         | artifact/xgb_lang.pkl, artifact/xgb_maths.pkl                  |
+| Prediction, tagging, profiling      | artifact/output/                                               |
 
 ---
 
-## Development notes
-- The Flask app runs the data transformation in-process by default for convenience. For production, run transformation as a separate job and point the API to the produced `artifact/test.csv`.
-- Logging is available: check the console where the app runs for detailed tracebacks.
-- The project supports editable install (`-e .`) for local development.
-- This -e . if appears in the requriements.txt can be dropped from the file
+## Troubleshooting
+
+| Issue                     | Resolution                                                       |
+|---------------------------|------------------------------------------------------------------|
+| Missing DB credentials    | Verify `.env` contains correct DB variables (`DATABASE_URL`)     |
+| psycopg2 build errors     | Install with `pip install psycopg2-binary`                       |
+| Missing model files       | Place required `.pkl` files in `artifact/`                       |
+| Data shape mismatch       | Ensure transformation outputs match model training features      |
+| Port 5001 in use          | Run: `lsof -i :5001` or `lsof -t -i :5001`                      |
 
 ---
+
+## Development Notes
+
+- The API runs data transformation in-process by default for convenience.
+- For production, separate transformation and point the API to prepared artefacts.
+- Logging and tracebacks appear in the console where the app runs.
+- Editable installs (`-e .`) in `requirements.txt` are only for local dev; remove if not needed.
+
+---
+
+## Summary Before Running
+
+- **Update all SQL table names to match your DB.**
+- **Ensure models and `.env` are correctly placed.**
+- Use the endpoints:
+
+```bash
+curl http://127.0.0.1:5001/predict
+curl http://127.0.0.1:5001/tagging
+curl http://127.0.0.1:5001/classprofiles
+```
+
+All outputs are stored under `artifact/output/`.
 
