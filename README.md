@@ -6,7 +6,6 @@ This project provides a lightweight Flask API and data pipeline for predicting s
 
 ## Overview
 
-
 - Transformation of raw/source data into model-ready features (`DataTransformation`).
 - Prediction of **Language** and **Maths** levels with trained models (`PredictPipeline`).
 - Tagging of **mistakes** and generation of individual/class profiling summaries (`DataTagging`, `dataprofiling`).
