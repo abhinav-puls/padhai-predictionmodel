@@ -159,6 +159,7 @@ results = dt.dataprofiling(df)
 - The Flask app runs the data transformation in-process by default for convenience. For production, run transformation as a separate job and point the API to the produced `artifact/test.csv`.
 - Logging is available: check the console where the app runs for detailed tracebacks.
 - The project supports editable install (`-e .`) for local development.
+- This -e . if appears in the requriements.txt can be dropped from the file
 
 ---
 
