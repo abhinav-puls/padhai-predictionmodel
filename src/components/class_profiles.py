@@ -2,6 +2,9 @@ import os
 import pandas as pd
 import datetime
 from typing import Tuple
+from src.utils import load_object
+from src.logger import logging
+from src.exception import CustomException
 
 # label maps (kept from original)
 lang_labels = {
@@ -29,6 +32,21 @@ cluster_labels = {
     9: "Data Not Available",
 }
 
+cluster_labels_language = {
+    0: "Skewed B&L",
+    1: "Advanced Leaning",
+    2: "Word Dominant",
+    3: "Uniform_Transition",
+    9: "Data Not Available",
+}
+
+cluster_labels_maths = {
+    0: "NR1 Dominant",
+    1: "NR2 Dominant",
+    2: "NR2 heavy and Transition",
+    3: "Advanced Leaning",
+    9: "Data Not Available",
+}
 
 def compute_cluster(math_dist: dict, lang_dist: dict, class_size: int | None = None) -> int:
     """Compute cluster id from normalized distributions (values 0..1)."""
@@ -47,6 +65,40 @@ def compute_cluster(math_dist: dict, lang_dist: dict, class_size: int | None = N
         return 1
     return 9
 
+def compute_subcategory(math_dist: dict, lang_dist: dict | None = None) -> tuple[int,int]:
+    lang_kmeans_model_path = 'artifact/models/kmeans_model_lang.pkl'
+    maths_kmeans_model_path = 'artifact/models/kmeans_model_maths.pkl'
+    logging.info("Using model paths lang=%s maths=%s", lang_kmeans_model_path, maths_kmeans_model_path)
+
+    # load models
+    try:
+        kmeans_lang_model = load_object(file_path=lang_kmeans_model_path)
+        logging.info("Loaded language kmeans model from %s", lang_kmeans_model_path)
+        kmeans_maths_model = load_object(file_path=maths_kmeans_model_path)
+        logging.info("Loaded maths kmeans model from %s", maths_kmeans_model_path)
+    except Exception:
+        logging.exception("Failed to load language or maths kmeans model")
+        raise
+
+
+    """Compute cluster id from normalized distributions (values 0..1)."""
+    beginner_nr1 = math_dist.get("Maths_Beginner", 0) + math_dist.get("Maths_NR1", 0)
+    nr2 = math_dist.get("Maths_NR2", 0)
+    sub_div = math_dist.get("Maths_Sub", 0) + math_dist.get("Maths_Div",0)
+
+    ## predict the cluster
+    maths_cluster = int(kmeans_maths_model.predict([[beginner_nr1,nr2,sub_div]]))
+
+    beginner_letter = lang_dist.get("Lang_Beginner", 0) + lang_dist.get("Lang_Letter", 0)
+    word = lang_dist.get("Lang_Word", 0)
+    paragraph_story = lang_dist.get("Lang_Paragraph", 0) + lang_dist.get("Lang_Story", 0) 
+
+    ## predict the cluster
+    lang_cluster = int(kmeans_lang_model.predict([[beginner_letter,word,paragraph_story]]))
+
+    return maths_cluster,lang_cluster
+
+
 
 def _compute_phase_cluster_df(df_phase: pd.DataFrame, lang_col: str, math_col: str, community_col: str = "community_id") -> pd.DataFrame:
     """
@@ -58,7 +110,7 @@ def _compute_phase_cluster_df(df_phase: pd.DataFrame, lang_col: str, math_col: s
     for community, grp in df_phase.groupby(community_col):
         total = len(grp)
         if total == 0:
-            rows.append((community, 9, cluster_labels.get(9)))
+            rows.append((community, 9, cluster_labels.get(9), cluster_labels_language.get(9),cluster_labels_maths.get(9)))
             continue
 
         # normalized distributions for labels 0..4
@@ -78,9 +130,14 @@ def _compute_phase_cluster_df(df_phase: pd.DataFrame, lang_col: str, math_col: s
         )
 
         cluster_id = compute_cluster(math_dist, lang_dist, total)
-        rows.append((community, cluster_id, cluster_labels.get(cluster_id, "Unknown")))
+        maths_cluster_id, lang_cluster_id =  compute_subcategory(math_dist=math_dist, lang_dist=lang_dist)
+        rows.append((community, 
+                     cluster_id,
+                     cluster_labels.get(cluster_id, "Unknown"), 
+                     cluster_labels_language.get(lang_cluster_id,"Unknown"),
+                     cluster_labels_maths.get(maths_cluster_id,"Unknown")))
 
-    return pd.DataFrame(rows, columns=[community_col, "cluster_id", "cluster_label"])
+    return pd.DataFrame(rows, columns=[community_col, "cluster_id", "cluster_label","lang_cluster","maths_cluster"])
 
 
 def compute_class_profiles(pred_df: pd.DataFrame, output_dir: str = os.path.join("artifact", "output")) -> Tuple[pd.DataFrame, str]:
@@ -134,10 +191,10 @@ def compute_class_profiles(pred_df: pd.DataFrame, output_dir: str = os.path.join
 
         # merge clusters by community_id
     merged = (
-            Ph0_cluster.rename(columns={"cluster_id": "cluster_bl", "cluster_label": "cluster_bl_label"})
-            .merge(Ph1_cluster.rename(columns={"cluster_id": "cluster_el1", "cluster_label": "cluster_el1_label"}), on="community_id", how="outer")
-            .merge(Ph2_cluster.rename(columns={"cluster_id": "cluster_el2", "cluster_label": "cluster_el2_label"}), on="community_id", how="outer")
-            .merge(Ph3_cluster.rename(columns={"cluster_id": "cluster_el3", "cluster_label": "cluster_el3_label"}), on="community_id", how="outer"))
+            Ph0_cluster.rename(columns={"cluster_id": "cluster_bl", "cluster_label": "cluster_bl_label","lang_cluster":"cluster_bl_language_label","maths_cluster":"cluster_bl_maths_label"})
+            .merge(Ph1_cluster.rename(columns={"cluster_id": "cluster_el1", "cluster_label": "cluster_el1_label","lang_cluster":"cluster_el1_language_label","maths_cluster":"cluster_el1_maths_label"}), on="community_id", how="outer")
+            .merge(Ph2_cluster.rename(columns={"cluster_id": "cluster_el2", "cluster_label": "cluster_el2_label","lang_cluster":"cluster_el2_language_label","maths_cluster":"cluster_el2_maths_label"}), on="community_id", how="outer")
+            .merge(Ph3_cluster.rename(columns={"cluster_id": "cluster_el3", "cluster_label": "cluster_el3_label","lang_cluster":"cluster_el3_language_label","maths_cluster":"cluster_el3_maths_label"}), on="community_id", how="outer"))
 
 
     # persist

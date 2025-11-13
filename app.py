@@ -271,7 +271,6 @@ def create_app():
                 "trace": traceback.format_exc().splitlines()[-1]
             }), 500
 
-
     @app.route("/classprofiles", methods=["GET"])
     def classprofiles():
         """
@@ -318,29 +317,60 @@ def create_app():
                 raise RuntimeError("Database engine not initialized")
 
             # fill missing labels with defaults
-            profiles_df["cluster_bl_label"] = profiles_df["cluster_bl_label"].fillna("Unknown")
-            profiles_df["cluster_el1_label"] = profiles_df["cluster_el1_label"].fillna("Unknown")
-            profiles_df["cluster_el2_label"] = profiles_df["cluster_el2_label"].fillna("Unknown")
-            profiles_df["cluster_el3_label"] = profiles_df["cluster_el3_label"].fillna("Unknown")
+            fill_defaults = [
+                            "cluster_bl_label",
+                            "cluster_bl_language_label",
+                            "cluster_bl_maths_label",
+                            "cluster_el1_label",
+                            "cluster_el1_language_label",
+                            "cluster_el1_maths_label",
+                            "cluster_el2_label",
+                            "cluster_el2_language_label",
+                            "cluster_el2_maths_label",
+                            "cluster_el3_label",
+                            "cluster_el3_language_label",
+                            "cluster_el3_maths_label"
+                        ]
+            for col in fill_defaults:
+                if col in profiles_df.columns:
+                    profiles_df[col] = profiles_df[col].fillna("Unknown")
 
             insert_sql = """
-            INSERT INTO parakh_v1_class_profiles (
-                community_id,
-                cluster_bl, cluster_bl_label,
-                cluster_el1, cluster_el1_label,
-                cluster_el2, cluster_el2_label,
-                cluster_el3, cluster_el3_label,
-                created_at
-            )
-            VALUES (
-                :community_id,
-                :cluster_bl, :cluster_bl_label,
-                :cluster_el1, :cluster_el1_label,
-                :cluster_el2, :cluster_el2_label,
-                :cluster_el3, :cluster_el3_label,
-                :created_at
-            )
-            """
+                        INSERT INTO parakh_v1_class_profiles (
+                            community_id,
+
+                            cluster_bl, cluster_bl_label,
+                            cluster_bl_language_label, cluster_bl_maths_label,
+
+                            cluster_el1, cluster_el1_label,
+                            cluster_el1_language_label, cluster_el1_maths_label,
+
+                            cluster_el2, cluster_el2_label,
+                            cluster_el2_language_label, cluster_el2_maths_label,
+
+                            cluster_el3, cluster_el3_label,
+                            cluster_el3_language_label, cluster_el3_maths_label,
+
+                            created_at
+                        )
+                        VALUES (
+                            :community_id,
+
+                            :cluster_bl, :cluster_bl_label,
+                            :cluster_bl_language_label, :cluster_bl_maths_label,
+
+                            :cluster_el1, :cluster_el1_label,
+                            :cluster_el1_language_label, :cluster_el1_maths_label,
+
+                            :cluster_el2, :cluster_el2_label,
+                            :cluster_el2_language_label, :cluster_el2_maths_label,
+
+                            :cluster_el3, :cluster_el3_label,
+                            :cluster_el3_language_label, :cluster_el3_maths_label,
+
+                            :created_at)
+
+                            """
 
             records = profiles_df.to_dict(orient="records")
             for row in records:
@@ -363,12 +393,24 @@ def create_app():
                             SET
                                 cluster_bl = :cluster_bl,
                                 cluster_bl_label = :cluster_bl_label,
+                                cluster_bl_language_label = :cluster_bl_language_label,
+                                cluster_bl_maths_label = :cluster_bl_maths_label,
+
                                 cluster_el1 = :cluster_el1,
                                 cluster_el1_label = :cluster_el1_label,
+                                cluster_el1_language_label = :cluster_el1_language_label,
+                                cluster_el1_maths_label = :cluster_el1_maths_label,
+
                                 cluster_el2 = :cluster_el2,
                                 cluster_el2_label = :cluster_el2_label,
+                                cluster_el2_language_label = :cluster_el2_language_label,
+                                cluster_el2_maths_label = :cluster_el2_maths_label,
+
                                 cluster_el3 = :cluster_el3,
                                 cluster_el3_label = :cluster_el3_label,
+                                cluster_el3_language_label = :cluster_el3_language_label,
+                                cluster_el3_maths_label = :cluster_el3_maths_label,
+
                                 created_at = :created_at
                             WHERE community_id = :community_id
                             """),
