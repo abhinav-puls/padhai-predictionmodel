@@ -41,8 +41,8 @@ class DataTransformation:
             # read using SQLAlchemy engine when available, else use raw psycopg2 connection
             try:
                 if engine is not None:
-                    parakh_v1_student = pd.read_sql('SELECT * FROM parakh_v1_student', con=engine)
-                    test = pd.read_sql('SELECT * FROM parakh_v1_test', con=engine)
+                    parakh_v1_student = pd.read_sql('SELECT * FROM parakh_v1_student WHERE is_deleted=False', con=engine)
+                    test = pd.read_sql('SELECT * FROM parakh_v1_test WHERE is_deleted = False', con=engine)
                 else:
                     # fallback to psycopg2 connection helper
                     from src.components.database import get_connection
@@ -64,7 +64,7 @@ class DataTransformation:
                 raise CustomException(e, sys)
 
             # os.makedirs(os.path.dirname(self.transformation_config.train_data_path), exist_ok = True)
-            print(parakh_v1_student.head(3))
+            # print(parakh_v1_student.head(3))
             student_df = parakh_v1_student[['community_id','id','grade']]
             student_df.to_csv(self.transformation_config.student_df_path, index = False, header = True)
             logging.info('Student_df is now being saved')
@@ -77,9 +77,9 @@ class DataTransformation:
                 .nunique()
                 .unstack(fill_value=0)
             )
-
+            # print(grade_counts)
             # Ensure only grades 3, 4, 5 are considered (others will be ignored)
-            for g in [3, 4, 5]:
+            for g in ['3', '4', '5']:
                 if g not in grade_counts.columns:
                     grade_counts[g] = 0
 
@@ -88,10 +88,12 @@ class DataTransformation:
 
             # Step 4: Rename columns
             grade_ratios = grade_ratios.rename(columns={
-                3: 'class_3_ratio',
-                4: 'class_4_ratio',
-                5: 'class_5_ratio'
+                '3': 'class_3_ratio',
+                '4': 'class_4_ratio',
+                '5': 'class_5_ratio'
             })[['class_3_ratio', 'class_4_ratio', 'class_5_ratio']]
+
+            # print(grade_ratios)
 
             # Step 5: Combine everything
             community_summary = (
@@ -231,7 +233,7 @@ class DataTransformation:
             
             student_df1 = student_df[['id','grade']]
             bl_t_student = pd.merge(student_df1, baselinedataset, left_on = 'id',right_on = 'student_id', how='left')
-            bl_test = pd.merge(bl_t_student,community_skills_grade, on='community_id', how='left' )
+            bl_test = pd.merge(bl_t_student,community_skills_grade, on='community_id', how='inner' )
             bl_test.to_csv(self.transformation_config.bl_test_path, index = False, header = True)
 
             logging.info('bl_test is created')
@@ -259,7 +261,7 @@ class DataTransformation:
 
             maths_map = {
                         'Beginner': 0,
-                        '0-9': 1,
+                        '1-9': 1,
                         '10-99': 2,
                         'Subtraction': 3,
                         'Division': 4

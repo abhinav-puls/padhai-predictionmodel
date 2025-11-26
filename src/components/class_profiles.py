@@ -80,23 +80,40 @@ def compute_subcategory(math_dist: dict, lang_dist: dict | None = None) -> tuple
         logging.exception("Failed to load language or maths kmeans model")
         raise
 
-
-    """Compute cluster id from normalized distributions (values 0..1)."""
+    # Maths cluster prediction
     beginner_nr1 = math_dist.get("Maths_Beginner", 0) + math_dist.get("Maths_NR1", 0)
     nr2 = math_dist.get("Maths_NR2", 0)
-    sub_div = math_dist.get("Maths_Sub", 0) + math_dist.get("Maths_Div",0)
+    sub_div = math_dist.get("Maths_Sub", 0) + math_dist.get("Maths_Div", 0)
 
-    ## predict the cluster
-    maths_cluster = int(kmeans_maths_model.predict([[beginner_nr1,nr2,sub_div]]))
+    # Convert to DataFrame with exact feature names from trained model
+    maths_features = pd.DataFrame(
+        [[beginner_nr1, nr2, sub_div]],
+        columns=['1_Beginner_NR1', '2_NR2', '3_Sub_Div']
+    )
+    maths_cluster = int(kmeans_maths_model.predict(maths_features)[0])
 
+    # Language cluster prediction
     beginner_letter = lang_dist.get("Lang_Beginner", 0) + lang_dist.get("Lang_Letter", 0)
     word = lang_dist.get("Lang_Word", 0)
-    paragraph_story = lang_dist.get("Lang_Paragraph", 0) + lang_dist.get("Lang_Story", 0) 
+    paragraph_story = lang_dist.get("Lang_Paragraph", 0) + lang_dist.get("Lang_Story", 0)
+    
+    # print(f"BL: {beginner_letter},W: {word}, PS: {paragraph_story}")
+    # Convert to DataFrame with exact feature names from trained model
+    lang_features = pd.DataFrame(
+        [[beginner_letter, word, paragraph_story]],
+        columns=['1_Beginner_Letter', '2_Word', '3_Paragraph_Story']
+    )
 
-    ## predict the cluster
-    lang_cluster = int(kmeans_lang_model.predict([[beginner_letter,word,paragraph_story]]))
+    lang_cluster = int(kmeans_lang_model.predict(lang_features)[0])
+    # print('printing beginner letter', beginner_letter)
+    # Enforce business rule: if beginner_letter > 0.35, force language sub-cluster = 0
+    # if beginner_letter > 0.35:
+    #     logging.info("Forcing language sub-cluster to 0 due to beginner_letter=%.3f", beginner_letter)
+    #     lang_cluster = 0
+    # else:
+    #     lang_cluster = int(kmeans_lang_model.predict(lang_features)[0])
 
-    return maths_cluster,lang_cluster
+    return maths_cluster, lang_cluster
 
 
 
@@ -128,7 +145,6 @@ def _compute_phase_cluster_df(df_phase: pd.DataFrame, lang_col: str, math_col: s
             .rename(index=math_labels)
             .to_dict()
         )
-
         cluster_id = compute_cluster(math_dist, lang_dist, total)
         maths_cluster_id, lang_cluster_id =  compute_subcategory(math_dist=math_dist, lang_dist=lang_dist)
         rows.append((community, 
