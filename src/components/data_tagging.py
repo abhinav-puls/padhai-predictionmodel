@@ -58,40 +58,29 @@ class DataTagging:
     def _fetch_test_details(self) -> pd.DataFrame:
         """
         Fetches the reading section test details from the database.
-        Falls back to psycopg2 if SQLAlchemy engine is unavailable.
+        Uses engine.begin() for automatic rollback on error.
         """
         logging.info("Fetching test details from the database...")
 
         try:
-            if engine is not None:
-                df = pd.read_sql("""
-                                SELECT td.id, td.student_id, td.level, 
-                                td.question, td.answer,td.answer_check_status, 
-                                td.no_del, td.no_sub, td.no_mistakes, 
-                                td.no_mistakes_edited, td.wcpm,
-                                t.manual_proficiency, t.test_type, t.community_id
-                                FROM parakh_v1_testdetail td LEFT JOIN parakh_v1_test t 
-                                ON td.test_id = t.id
-                                WHERE td.section='reading'""",
-                    con=engine
+            if engine is None:
+                raise RuntimeError("Database engine not initialized")
+
+            # Use engine.begin() for automatic transaction management
+            with engine.begin() as conn:
+                df = pd.read_sql(
+                    """
+                    SELECT td.id, td.student_id, td.level, 
+                           td.question, td.answer, td.answer_check_status, 
+                           td.no_del, td.no_sub, td.no_mistakes, 
+                           td.no_mistakes_edited, td.wcpm,
+                           t.manual_proficiency, t.test_type, t.community_id
+                    FROM parakh_v1_testdetail td 
+                    LEFT JOIN parakh_v1_test t ON td.test_id = t.id
+                    WHERE td.section='reading'
+                    """,
+                    con=conn
                 )
-            else:
-                from src.components.database import get_connection
-                conn = get_connection()
-                try:
-                    df = pd.read_sql(
-                        """SELECT td.id, td.student_id, td.level, 
-                                    td.question, td.answer,td.answer_check_status, 
-                                    td.no_del, td.no_sub, td.no_mistakes, 
-                                    td.no_mistakes_edited, td.wcpm,
-                                    t.manual_proficiency, t.test_type, t.community_id
-                                 FROM parakh_v1_testdetail td LEFT JOIN parakh_v1_test t 
-                                 ON td.test_id = t.id
-                                 WHERE td.section='reading'""",
-                        con=conn
-                    )
-                finally:
-                    conn.close()
 
             logging.info(f"Fetched {len(df)} records from the database.")
             return df

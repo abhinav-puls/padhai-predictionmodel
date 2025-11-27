@@ -82,7 +82,7 @@ def create_app():
 
             dataProfiling = dataTaggingVar.data_profiling(combined_df)
             app.logger.info("Profiling process completed successfully.")
-            print("data profiling", dataProfiling)
+            print("data profiling shape:", dataProfiling.shape)
 
             # Check if the engine instance is created
             if engine is None:
@@ -91,6 +91,7 @@ def create_app():
 
             profile_records = dataProfiling.to_dict(orient="records")
 
+            # Use engine.begin() for automatic rollback
             with engine.begin() as conn:
                 for row in profile_records:
                     row["created_at"] = datetime.utcnow()
@@ -123,12 +124,12 @@ def create_app():
             app.logger.info("Mistake profiles successfully inserted/updated in database")
 
             return jsonify({
-                "status": "success",
-                "message": "Data update and insertion is successful",
-                "output_paths": {
-                    "final_profiles": dataTaggingVar.config.finalProfiles,
-                }
-            }), 200
+            "status": "success",
+            "message": "Data update and insertion is successful",
+            "output_paths": {
+                "final_profiles": dataTaggingVar.config.finalProfiles,
+            }
+        }), 200
 
         except Exception as e:
             app.logger.exception("Error while running tagging/ data insertion pipeline.")
